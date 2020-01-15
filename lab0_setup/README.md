@@ -8,12 +8,11 @@
 
 ## Modify this section
 
-- How many hours did it take you to complete this lab?
-- Did you collaborate with any other students/TAs/Professors?
+- How many hours did it take you to complete this lab? 1.5 hours
+- Did you collaborate with any other students/TAs/Professors? No
 - Did you use any external resources? (Cite them below)
-  - tbd
-  - tbd
-- (Optional) What was your favorite part of the lab?
+  - Stack Overflow
+- (Optional) What was your favorite part of the lab? Seeing it come together
 - (Optional) How would you improve the lab?
 
 ## Logistics
@@ -65,12 +64,12 @@ Provided below is a first C++ code snippet so you can get up to speed. Our first
 // Specially named function that is the entry point into our program.
 int main()
 {
-    
+
 // ========================== for - loops ====================
      // Allocate an array on the stack.
      // This array cannot be referenced outside the main function.
      int myArray[10];
-     
+
      // A loop that pre-increments 'i' by one each iteration of the
      // loop.
      for(int i =0; i < 10 ; ++i) {
@@ -80,12 +79,12 @@ int main()
         // text to standard output (i.e. typically our terminal window)
         std::cout << i << " ";
      }
-    
-     // Here we create a string type. It is part of the 
+
+     // Here we create a string type. It is part of the
      // standard library namespace, which is why it begins with
      // std::
      std::string s= "hello";
-     
+
      // Here is a different kind of loop.
      for(char c : s) {
      // Range-based for loops are useful if we are not modifying any values.
@@ -93,7 +92,7 @@ int main()
      // in many other programming languages, and now C++
         std::cout << c ;
      }
-     
+
      // More information can be found here: http://en.cppreference.com/w/cpp/language/range-for
 }
 ```
