@@ -1,5 +1,6 @@
 // Includes for the assignment
 #include <iostream>
+#include <string>
 #include "Matrix4f.h"
 #include "Vector4f.h"
 
@@ -163,14 +164,6 @@ int main() {
   std::cout << "Passed 3: " << unitTest3() << " \n";
   std::cout << "Passed 4: " << unitTest4() << " \n";
   std::cout << "Passed 5: " << unitTest5() << " \n";
-
-  Vector4f my_vector = Vector4f(2, 4, 6, 4);
-  Vector4f my_vector2 = Vector4f(1, 2, 3, 4);
-  my_vector /= 2;
-  my_vector = my_vector2 * 2;
-  my_vector = my_vector2 / 2;
-  std::cout << my_vector[0] << "," << my_vector[1] << "," << my_vector[2]
-            << std::endl;
 
   return 0;
 }

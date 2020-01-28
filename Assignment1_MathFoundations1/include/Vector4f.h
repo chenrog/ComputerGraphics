@@ -70,6 +70,20 @@ struct Vector4f {
 
     return (*this);
   }
+
+  std::string toString() {
+    std::string string = "";
+    string = string + "Vector4[";
+    string = string + "x:" + std::to_string(x);
+    string = string + ", ";
+    string = string + "y:" + std::to_string(y);
+    string = string + ", ";
+    string = string + "z:" + std::to_string(z);
+    string = string + ", ";
+    string = string + "w:" + std::to_string(w);
+    string = string + "]";
+    return string;
+  }
 };
 
 // Compute the dot product of a Vector4f
@@ -141,19 +155,19 @@ inline Vector4f operator-(const Vector4f& a, const Vector4f& b) {
   return vec;
 }
 
-// Vector Projection
-// Note: This is the vector projection of 'a' onto 'b'
-inline Vector4f Project(const Vector4f& a, const Vector4f& b) {
-  float mag = Dot(a, (b / Magnitude(b)));
-  Vector4f vec = Normalize(b) * mag;
-  return vec;
-}
-
 // Set a vectors magnitude to 1
 // Note: This is NOT generating a normal vector
 inline Vector4f Normalize(const Vector4f& v) {
   float mag = Magnitude(v);
   Vector4f vec = v / mag;
+  return vec;
+}
+
+// Vector Projection
+// Note: This is the vector projection of 'a' onto 'b'
+inline Vector4f Project(const Vector4f& a, const Vector4f& b) {
+  float mag = Dot(a, (b / Magnitude(b)));
+  Vector4f vec = Normalize(b) * mag;
   return vec;
 }
 
@@ -172,7 +186,5 @@ inline Vector4f CrossProduct(const Vector4f& a, const Vector4f& b) {
   Vector4f vec = Vector4f(x, y, z, w);
   return vec;
 }
-
-std::string toString() { return "hi"; }
 
 #endif
