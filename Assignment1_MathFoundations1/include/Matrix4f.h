@@ -17,7 +17,6 @@ private:
 public:
     Matrix4f() = default;
 
-    // TODO: Row or column major order you decide!
     // Matrix constructor with 9 scalar values.
     // ROW MAJOR
     Matrix4f( float n00, float n01, float n02, float n03,

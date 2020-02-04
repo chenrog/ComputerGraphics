@@ -11,13 +11,167 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtx/transform.hpp>
 
-// Sample unit test comparing against GLM.
+// VECTOR TESTS
+
+// Constructor Test
+bool VectorUnitTest0() {
+  Vector4f v(1.0f, 1.0f, 1.0f, 1.0f);
+  glm::vec4 v2 = glm::vec4(1.0f);
+
+  // initial constructor setup
+  if (v[0] == v2[0] && v[1] == v2[1] && v[2] == v2[2] && v[3] == v2[3]) {
+    return true;
+  }
+
+  return false;
+}
+
+// Constructor Test
+bool VectorUnitTest1() {
+  Vector4f v(1.0f);
+  glm::vec4 v2 = glm::vec4(1.0f);
+
+  // initial constructor setup
+  if (v[0] == v2[0] && v[1] == v2[1] && v[2] == v2[2] && v[3] == v2[3]) {
+    return true;
+  }
+
+  return false;
+}
+
+// Multiplication Test
+bool VectorUnitTest2() {
+  Vector4f v(1.0f);
+  glm::vec4 v2 = glm::vec4(1.0f);
+  v *= 2;
+  v2 *= 2;
+
+  // initial constructor setup
+  if (v[0] == v2[0] && v[1] == v2[1] && v[2] == v2[2] && v[3] == v2[3]) {
+    return true;
+  }
+
+  return false;
+}
+
+// Division Test
+bool VectorUnitTest3() {
+  Vector4f v(1.0f);
+  glm::vec4 v2 = glm::vec4(1.0f);
+  v /= 2;
+  v2 /= 2;
+
+  // initial constructor setup
+  if (v[0] == v2[0] && v[1] == v2[1] && v[2] == v2[2] && v[3] == v2[3]) {
+    return true;
+  }
+
+  return false;
+}
+
+// Addition Test
+bool VectorUnitTest4() {
+  Vector4f v(1.0f);
+  Vector4f v3(1.0f);
+  glm::vec4 v2 = glm::vec4(1.0f);
+  glm::vec4 v4 = glm::vec4(1.0f);
+  v += v3;
+  v2 += v4;
+
+  // initial constructor setup
+  if (v[0] == v2[0] && v[1] == v2[1] && v[2] == v2[2] && v[3] == v2[3]) {
+    return true;
+  }
+
+  return false;
+}
+
+// Subtraction Test
+bool VectorUnitTest5() {
+  Vector4f v(1.0f);
+  Vector4f v3(1.0f);
+  glm::vec4 v2 = glm::vec4(1.0f);
+  glm::vec4 v4 = glm::vec4(1.0f);
+  v -= v3;
+  v2 -= v4;
+
+  // initial constructor setup
+  if (v[0] == v2[0] && v[1] == v2[1] && v[2] == v2[2] && v[3] == v2[3]) {
+    return true;
+  }
+
+  return false;
+}
+
+// Dot Product Test
+bool VectorUnitTest6() {
+  Vector4f v(3.0f);
+  Vector4f v3(2.0f);
+  glm::vec4 v2 = glm::vec4(3.0f);
+  glm::vec4 v4 = glm::vec4(2.0f);
+  float myDot = Dot(v, v3);
+  float glmDot = glm::dot(v2, v4);
+
+  // initial constructor setup
+  if (myDot == glmDot) {
+    return true;
+  }
+
+  return false;
+}
+
+// Magnitude Test
+bool VectorUnitTest7() {
+  Vector4f v(3.0f);
+  glm::vec4 v2 = glm::vec4(3.0f);
+
+  // initial constructor setup
+  if (Magnitude(v) == glm::length(v2)) {
+    return true;
+  }
+
+  return false;
+}
+
+// Normalize Test
+bool VectorUnitTest8() {
+  Vector4f v(3.0f);
+  glm::vec4 v2 = glm::vec4(3.0f);
+  v = Normalize(v);
+  v2 = glm::normalize(v2);
+
+  // initial constructor setup
+  if (v[0] == v2[0] && v[1] == v2[1] && v[2] == v2[2] && v[3] == v2[3]) {
+    return true;
+  }
+
+  return false;
+}
+
+// CrossProduct Test
+bool VectorUnitTest9() {
+  Vector4f v(3.0f);
+  Vector4f v3(2.0f);
+  glm::vec3 v2 = glm::vec3(3.0f);
+  glm::vec3 v4 = glm::vec3(2.0f);
+  v = CrossProduct(v, v3);
+  v2 = glm::cross(v2, v4);
+
+  // initial constructor setup
+  if (v[0] == v2[0] && v[1] == v2[1] && v[2] == v2[2]) {
+    return true;
+  }
+
+  return false;
+}
+
+// MATRIX TESTS
+
+// Identity Matrix
 bool unitTest0() {
   glm::mat4 glmIdentityMatrix = glm::mat4(1.0f);
-  Matrix4f myIdentity(1.0f, 0, 0, 0,
-                      0, 1.0f, 0, 0,
-                      0, 0, 1.0f, 0,
-                      0, 0, 0, 1.0f);
+  Matrix4f myIdentity(1.0f, 0, 0, 0, 0, 1.0f, 0, 0, 0, 0, 1.0f, 0, 0, 0, 0,
+                      1.0f);
 
   if (glmIdentityMatrix[0][0] == myIdentity[0][0] &&
       glmIdentityMatrix[0][1] == myIdentity[0][1] &&
@@ -43,10 +197,8 @@ bool unitTest0() {
 
 bool unitTest1() {
   glm::mat4 glmIdentityMatrix = glm::mat4(1.0f);
-  Matrix4f myIdentity(1.0f, 0, 0, 0,
-                      0, 1.0f, 0, 0,
-                      0, 0, 1.0f, 0,
-                      0, 0, 0, 1.0f);
+  Matrix4f myIdentity(1.0f, 0, 0, 0, 0, 1.0f, 0, 0, 0, 0, 1.0f, 0, 0, 0, 0,
+                      1.0f);
 
   if (glmIdentityMatrix[0][0] == myIdentity(0, 0) &&
       glmIdentityMatrix[0][1] == myIdentity(0, 1) &&
@@ -160,8 +312,22 @@ bool unitTest5() {
 int main() {
   // Keep track of the tests passed
   unsigned int testsPassed = 0;
+  std::cout << "VECTOR4 TESTS"
+            << "\n";
+  std::cout << "4FloatsConstructor: " << VectorUnitTest0() << " \n";
+  std::cout << "1FloatConstructor: " << VectorUnitTest1() << " \n";
+  std::cout << "Multiplication: " << VectorUnitTest2() << " \n";
+  std::cout << "Division: " << VectorUnitTest3() << " \n";
+  std::cout << "Addition: " << VectorUnitTest4() << " \n";
+  std::cout << "Subtraction: " << VectorUnitTest5() << " \n";
+  std::cout << "Dot: " << VectorUnitTest6() << " \n";
+  std::cout << "Magnitude: " << VectorUnitTest7() << " \n";
+  std::cout << "Normalize: " << VectorUnitTest8() << " \n";
+  std::cout << "CrossProduct: " << VectorUnitTest9() << " \n";
 
   // Run 'unit tests'
+  std::cout << "\nMATRIX4 TESTS"
+            << "\n";
   std::cout << "Passed 0: " << unitTest0() << " \n";
   std::cout << "Passed 1: " << unitTest1() << " \n";
   std::cout << "Passed 2: " << unitTest2() << " \n";

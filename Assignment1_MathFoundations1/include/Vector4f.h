@@ -26,6 +26,13 @@ struct Vector4f {
     w = d;
   }
 
+  Vector4f(float a) {
+    x = a;
+    y = a;
+    z = a;
+    w = a;
+  }
+
   // Index operator, allowing us to access the individual
   // x,y,z,w components of our vector.
   float& operator[](int i) { return ((&x)[i]); }
@@ -37,36 +44,40 @@ struct Vector4f {
   // Multiplication Operator
   // Multiply vector by a uniform-scalar.
   Vector4f& operator*=(float s) {
-    for (int i = 0; i < 4; i++) {
-      (*this)[i] *= s;
-    }
+    (*this)[0] *= s;
+    (*this)[1] *= s;
+    (*this)[2] *= s;
+    (*this)[3] *= s;
 
     return (*this);
   }
 
   // Division Operator
   Vector4f& operator/=(float s) {
-    for (int i = 0; i < 4; i++) {
-      (*this)[i] /= s;
-    }
+    (*this)[0] /= s;
+    (*this)[1] /= s;
+    (*this)[2] /= s;
+    (*this)[3] /= s;
 
     return (*this);
   }
 
   // Addition operator
   Vector4f& operator+=(const Vector4f& v) {
-    for (int i = 0; i < 4; i++) {
-      (*this)[i] += v[i];
-    }
+    (*this)[0] += v[0];
+    (*this)[1] += v[1];
+    (*this)[2] += v[2];
+    (*this)[3] += v[3];
 
     return (*this);
   }
 
   // Subtraction operator
   Vector4f& operator-=(const Vector4f& v) {
-    for (int i = 0; i < 4; i++) {
-      (*this)[i] -= v[i];
-    }
+    (*this)[0] -= v[0];
+    (*this)[1] -= v[1];
+    (*this)[2] -= v[2];
+    (*this)[3] -= v[3];
 
     return (*this);
   }
@@ -89,18 +100,23 @@ struct Vector4f {
 // Compute the dot product of a Vector4f
 inline float Dot(const Vector4f& a, const Vector4f& b) {
   float sum = 0;
-  for (int i = 0; i < 4; i++) {
-    sum += (a[i] * b[i]);
-  }
+
+  sum += (a[0] * b[0]);
+  sum += (a[1] * b[1]);
+  sum += (a[2] * b[2]);
+  sum += (a[3] * b[3]);
+
   return sum;
 }
 
 // Multiplication of a vector by a scalar values
 inline Vector4f operator*(const Vector4f& v, float s) {
   Vector4f vec;
-  for (int i = 0; i < 4; i++) {
-    vec[i] = v[i] * s;
-  }
+
+  vec[0] = v[0] * s;
+  vec[1] = v[1] * s;
+  vec[2] = v[2] * s;
+  vec[3] = v[3] * s;
 
   return vec;
 }
@@ -108,9 +124,11 @@ inline Vector4f operator*(const Vector4f& v, float s) {
 // Division of a vector by a scalar value.
 inline Vector4f operator/(const Vector4f& v, float s) {
   Vector4f vec;
-  for (int i = 0; i < 4; i++) {
-    vec[i] = v[i] / s;
-  }
+
+  vec[0] = v[0] / s;
+  vec[1] = v[1] / s;
+  vec[2] = v[2] / s;
+  vec[3] = v[3] / s;
 
   return vec;
 }
@@ -119,9 +137,11 @@ inline Vector4f operator/(const Vector4f& v, float s) {
 // Use Case: Sometimes it is handy to apply a force in an opposite direction
 inline Vector4f operator-(const Vector4f& v) {
   Vector4f vec;
-  for (int i = 0; i < 4; i++) {
-    vec[i] = v[i] * -1;
-  }
+
+  vec[0] = v[0] * -1;
+  vec[1] = v[1] * -1;
+  vec[2] = v[2] * -1;
+  vec[3] = v[3] * -1;
 
   return vec;
 }
@@ -129,18 +149,26 @@ inline Vector4f operator-(const Vector4f& v) {
 // Return the magnitude of a vector
 inline float Magnitude(const Vector4f& v) {
   float sum = 0;
-  for (int i = 0; i < 4; i++) {
-    sum += (v[i] * v[i]);
-  }
+
+  sum += (v[0] * v[0]);
+  sum += (v[1] * v[1]);
+  sum += (v[2] * v[2]);
+  sum += (v[3] * v[3]);
+
   return sqrt(sum);
 }
+
+// alias for magnitude
+inline float Length(const Vector4f& v) { return Magnitude(v); }
 
 // Add two vectors together
 inline Vector4f operator+(const Vector4f& a, const Vector4f& b) {
   Vector4f vec;
-  for (int i = 0; i < 4; i++) {
-    vec[i] = a[i] + b[i];
-  }
+
+  vec[0] = a[0] + b[0];
+  vec[1] = a[1] + b[1];
+  vec[2] = a[2] + b[2];
+  vec[3] = a[3] + b[3];
 
   return vec;
 }
@@ -148,9 +176,11 @@ inline Vector4f operator+(const Vector4f& a, const Vector4f& b) {
 // Subtract two vectors
 inline Vector4f operator-(const Vector4f& a, const Vector4f& b) {
   Vector4f vec;
-  for (int i = 0; i < 4; i++) {
-    vec[i] = a[i] - b[i];
-  }
+
+  vec[0] = a[0] - b[0];
+  vec[1] = a[1] - b[1];
+  vec[2] = a[2] - b[2];
+  vec[3] = a[3] - b[3];
 
   return vec;
 }
