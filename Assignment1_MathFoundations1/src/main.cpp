@@ -12,6 +12,9 @@
 #include <glm/gtx/transform.hpp>
 
 // VECTOR TESTS
+bool compareVec(Vector4f v, glm::vec4 v2) {
+  return v[0] == v2[0] && v[1] == v2[1] && v[2] == v2[2] && v[3] == v2[3];
+}
 
 // Constructor Test
 bool VectorUnitTest0() {
@@ -19,7 +22,7 @@ bool VectorUnitTest0() {
   glm::vec4 v2 = glm::vec4(1.0f);
 
   // initial constructor setup
-  if (v[0] == v2[0] && v[1] == v2[1] && v[2] == v2[2] && v[3] == v2[3]) {
+  if (compareVec(v, v2)) {
     return true;
   }
 
@@ -32,7 +35,7 @@ bool VectorUnitTest1() {
   glm::vec4 v2 = glm::vec4(1.0f);
 
   // initial constructor setup
-  if (v[0] == v2[0] && v[1] == v2[1] && v[2] == v2[2] && v[3] == v2[3]) {
+  if (compareVec(v, v2)) {
     return true;
   }
 
@@ -47,7 +50,7 @@ bool VectorUnitTest2() {
   v2 *= 2;
 
   // initial constructor setup
-  if (v[0] == v2[0] && v[1] == v2[1] && v[2] == v2[2] && v[3] == v2[3]) {
+  if (compareVec(v, v2)) {
     return true;
   }
 
@@ -62,7 +65,7 @@ bool VectorUnitTest3() {
   v2 /= 2;
 
   // initial constructor setup
-  if (v[0] == v2[0] && v[1] == v2[1] && v[2] == v2[2] && v[3] == v2[3]) {
+  if (compareVec(v, v2)) {
     return true;
   }
 
@@ -79,7 +82,7 @@ bool VectorUnitTest4() {
   v2 += v4;
 
   // initial constructor setup
-  if (v[0] == v2[0] && v[1] == v2[1] && v[2] == v2[2] && v[3] == v2[3]) {
+  if (compareVec(v, v2)) {
     return true;
   }
 
@@ -96,7 +99,7 @@ bool VectorUnitTest5() {
   v2 -= v4;
 
   // initial constructor setup
-  if (v[0] == v2[0] && v[1] == v2[1] && v[2] == v2[2] && v[3] == v2[3]) {
+  if (compareVec(v, v2)) {
     return true;
   }
 
@@ -141,7 +144,7 @@ bool VectorUnitTest8() {
   v2 = glm::normalize(v2);
 
   // initial constructor setup
-  if (v[0] == v2[0] && v[1] == v2[1] && v[2] == v2[2] && v[3] == v2[3]) {
+  if (compareVec(v, v2)) {
     return true;
   }
 
@@ -167,55 +170,50 @@ bool VectorUnitTest9() {
 
 // MATRIX TESTS
 
+bool compareMat(Matrix4f mat, glm::mat4 mat2) {
+  return (mat[0][0] == mat2[0][0] &&
+          mat[0][1] == mat2[0][1] &&
+          mat[0][2] == mat2[0][2] &&
+          mat[0][3] == mat2[0][3] &&
+          mat[1][0] == mat2[1][0] &&
+          mat[1][1] == mat2[1][1] &&
+          mat[1][2] == mat2[1][2] &&
+          mat[1][3] == mat2[1][3] &&
+          mat[2][0] == mat2[2][0] &&
+          mat[2][1] == mat2[2][1] &&
+          mat[2][2] == mat2[2][2] &&
+          mat[2][3] == mat2[2][3] &&
+          mat[3][0] == mat2[3][0] &&
+          mat[3][1] == mat2[3][1] &&
+          mat[3][2] == mat2[3][2] &&
+          mat[3][3] == mat2[3][3]);
+}
+
 // Identity Matrix
 bool unitTest0() {
+  Matrix4f myIdentity(1.0f, 0, 0, 0,
+                      0, 1.0f, 0, 0,
+                      0, 0, 1.0f, 0,
+                      0, 0, 0, 1.0f);
   glm::mat4 glmIdentityMatrix = glm::mat4(1.0f);
-  Matrix4f myIdentity(1.0f, 0, 0, 0, 0, 1.0f, 0, 0, 0, 0, 1.0f, 0, 0, 0, 0,
-                      1.0f);
 
-  if (glmIdentityMatrix[0][0] == myIdentity[0][0] &&
-      glmIdentityMatrix[0][1] == myIdentity[0][1] &&
-      glmIdentityMatrix[0][2] == myIdentity[0][2] &&
-      glmIdentityMatrix[0][3] == myIdentity[0][3] &&
-      glmIdentityMatrix[1][0] == myIdentity[1][0] &&
-      glmIdentityMatrix[1][1] == myIdentity[1][1] &&
-      glmIdentityMatrix[1][2] == myIdentity[1][2] &&
-      glmIdentityMatrix[1][3] == myIdentity[1][3] &&
-      glmIdentityMatrix[2][0] == myIdentity[2][0] &&
-      glmIdentityMatrix[2][1] == myIdentity[2][1] &&
-      glmIdentityMatrix[2][2] == myIdentity[2][2] &&
-      glmIdentityMatrix[2][3] == myIdentity[2][3] &&
-      glmIdentityMatrix[3][0] == myIdentity[3][0] &&
-      glmIdentityMatrix[3][1] == myIdentity[3][1] &&
-      glmIdentityMatrix[3][2] == myIdentity[3][2] &&
-      glmIdentityMatrix[3][3] == myIdentity[3][3]) {
+  if (compareMat(myIdentity, glmIdentityMatrix)) {
     return true;
   }
 
   return false;
 }
 
+// Sample unit test comparing against GLM.
 bool unitTest1() {
   glm::mat4 glmIdentityMatrix = glm::mat4(1.0f);
-  Matrix4f myIdentity(1.0f, 0, 0, 0, 0, 1.0f, 0, 0, 0, 0, 1.0f, 0, 0, 0, 0,
-                      1.0f);
+  Vector4f a(1.0f, 0.0f, 0.0f, 0.0f);
+  Vector4f b(0.0f, 1.0f, 0.0f, 0.0f);
+  Vector4f c(0.0f, 0.0f, 1.0f, 0.0f);
+  Vector4f d(0.0f, 0.0f, 0.0f, 1.0f);
+  Matrix4f myIdentity(a, b, c, d);
 
-  if (glmIdentityMatrix[0][0] == myIdentity(0, 0) &&
-      glmIdentityMatrix[0][1] == myIdentity(0, 1) &&
-      glmIdentityMatrix[0][2] == myIdentity(0, 2) &&
-      glmIdentityMatrix[0][3] == myIdentity(0, 3) &&
-      glmIdentityMatrix[1][0] == myIdentity(1, 0) &&
-      glmIdentityMatrix[1][1] == myIdentity(1, 1) &&
-      glmIdentityMatrix[1][2] == myIdentity(1, 2) &&
-      glmIdentityMatrix[1][3] == myIdentity(1, 3) &&
-      glmIdentityMatrix[2][0] == myIdentity(2, 0) &&
-      glmIdentityMatrix[2][1] == myIdentity(2, 1) &&
-      glmIdentityMatrix[2][2] == myIdentity(2, 2) &&
-      glmIdentityMatrix[2][3] == myIdentity(2, 3) &&
-      glmIdentityMatrix[3][0] == myIdentity(3, 0) &&
-      glmIdentityMatrix[3][1] == myIdentity(3, 1) &&
-      glmIdentityMatrix[3][2] == myIdentity(3, 2) &&
-      glmIdentityMatrix[3][3] == myIdentity(3, 3)) {
+  if (compareMat(myIdentity, glmIdentityMatrix)) {
     return true;
   }
 
@@ -224,29 +222,10 @@ bool unitTest1() {
 
 // Sample unit test comparing against GLM.
 bool unitTest2() {
-  glm::mat4 glmIdentityMatrix = glm::mat4(1.0f);
-  Vector4f a(1.0f, 0.0f, 0.0f, 0.0f);
-  Vector4f b(0.0f, 1.0f, 0.0f, 0.0f);
-  Vector4f c(0.0f, 0.0f, 1.0f, 0.0f);
-  Vector4f d(0.0f, 0.0f, 0.0f, 1.0f);
-  Matrix4f myIdentity(a, b, c, d);
+  Matrix4f mat(3.0f);
+  glm::mat4 mat2 = glm::mat4(3.0f);
 
-  if (glmIdentityMatrix[0][0] == myIdentity[0][0] &&
-      glmIdentityMatrix[0][1] == myIdentity[0][1] &&
-      glmIdentityMatrix[0][2] == myIdentity[0][2] &&
-      glmIdentityMatrix[0][3] == myIdentity[0][3] &&
-      glmIdentityMatrix[1][0] == myIdentity[1][0] &&
-      glmIdentityMatrix[1][1] == myIdentity[1][1] &&
-      glmIdentityMatrix[1][2] == myIdentity[1][2] &&
-      glmIdentityMatrix[1][3] == myIdentity[1][3] &&
-      glmIdentityMatrix[2][0] == myIdentity[2][0] &&
-      glmIdentityMatrix[2][1] == myIdentity[2][1] &&
-      glmIdentityMatrix[2][2] == myIdentity[2][2] &&
-      glmIdentityMatrix[2][3] == myIdentity[2][3] &&
-      glmIdentityMatrix[3][0] == myIdentity[3][0] &&
-      glmIdentityMatrix[3][1] == myIdentity[3][1] &&
-      glmIdentityMatrix[3][2] == myIdentity[3][2] &&
-      glmIdentityMatrix[3][3] == myIdentity[3][3]) {
+  if (compareMat(mat, mat2)) {
     return true;
   }
 
@@ -309,6 +288,27 @@ bool unitTest5() {
   return false;
 }
 
+// Sample unit test comparing against GLM.
+bool unitTest6() {
+  glm::mat4 mat2 = glm::mat4(3.0f);
+  mat2[1][3] = 72.0f;
+  mat2[2][3] = 2.1f;
+  glm::vec4 v2 = glm::vec4(2.0f);
+  v2 = mat2 * v2;
+
+  Matrix4f mat(3.0f);
+  mat[3][1] = 72.0f;
+  mat[3][2] = 2.1f;
+  Vector4f v(2.0f);
+  v = mat * v;
+
+  if (compareVec(v, v2)) {
+    return true;
+  }
+
+  return false;
+}
+
 int main() {
   // Keep track of the tests passed
   unsigned int testsPassed = 0;
@@ -334,6 +334,7 @@ int main() {
   std::cout << "Passed 3: " << unitTest3() << " \n";
   std::cout << "Passed 4: " << unitTest4() << " \n";
   std::cout << "Passed 5: " << unitTest5() << " \n";
+  std::cout << "Passed 6: " << unitTest6() << " \n";
 
   return 0;
 }

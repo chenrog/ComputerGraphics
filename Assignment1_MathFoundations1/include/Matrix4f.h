@@ -30,6 +30,13 @@ public:
         n[3][0] = n30; n[3][1] = n31; n[3][2] = n32; n[3][3] = n33;
     }
 
+    Matrix4f(float a) {
+      n[0][0] = a; n[0][1] = 0.0f; n[0][2] = 0.0f; n[0][3] = 0.0f;
+      n[1][0] = 0.0f; n[1][1] = a; n[1][2] = 0.0f; n[1][3] = 0.0f;
+      n[2][0] = 0.0f; n[2][1] = 0.0f; n[2][2] = a; n[2][3] = 0.0f;
+      n[3][0] = 0.0f; n[3][1] = 0.0f; n[3][2] = 0.0f; n[3][3] = a;
+    }
+
     // Matrix constructor from four vectors.
     // Note: 'd' will almost always be 0,0,0,1
     Matrix4f(const Vector4f& a, const Vector4f& b, const Vector4f& c, const Vector4f& d){
@@ -40,17 +47,11 @@ public:
     }
 
     // Makes the matrix an identity matrix
-    void identity(){
-        for (int row = 0; row < 4; row++) {
-          for (int col = 0; col < 4; col++) {
-            if (row == col) {
-              n[row][col] = 1;
-            }
-            else {
-              n[row][col] = 0;
-            }
-          }
-        }
+    void identity() {
+      n[0][0] = 1.0f; n[0][1] = 0.0f; n[0][2] = 0.0f; n[0][3] = 0.0f;
+      n[1][0] = 0.0f; n[1][1] = 1.0f; n[1][2] = 0.0f; n[1][3] = 0.0f;
+      n[2][0] = 0.0f; n[2][1] = 0.0f; n[2][2] = 1.0f; n[2][3] = 0.0f;
+      n[3][0] = 0.0f; n[3][1] = 0.0f; n[3][2] = 0.0f; n[3][3] = 1.0f;
     }
 
     // Index operator with two dimensions
@@ -112,8 +113,12 @@ Matrix4f operator *(const Matrix4f& A, const Matrix4f& B){
 
 Vector4f operator *(const Matrix4f& M, const Vector4f& v){
   // TODO:
-  Vector4f vec;
+  float x = (M[0][0] * v[0]) + (M[0][1] * v[0]) + (M[0][2] * v[0]) + (M[0][3] * v[0]);
+  float y = (M[1][0] * v[0]) + (M[1][1] * v[0]) + (M[1][2] * v[0]) + (M[1][3] * v[0]);
+  float z = (M[2][0] * v[0]) + (M[2][1] * v[0]) + (M[2][2] * v[0]) + (M[2][3] * v[0]);
+  float w = (M[3][0] * v[0]) + (M[3][1] * v[0]) + (M[3][2] * v[0]) + (M[3][3] * v[0]);
 
+  Vector4f vec = Vector4f(x, y, z, w);
   return vec;
 }
 
