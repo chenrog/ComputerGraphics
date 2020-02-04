@@ -40,10 +40,10 @@ public:
     // Matrix constructor from four vectors.
     // Note: 'd' will almost always be 0,0,0,1
     Matrix4f(const Vector4f& a, const Vector4f& b, const Vector4f& c, const Vector4f& d){
-      n[0][0] = a.x; n[0][1] = b.x; n[0][2] = c.x; n[0][3] = d.x;
-      n[1][0] = a.y; n[1][1] = b.y; n[1][2] = c.y; n[1][3] = d.y;
-      n[2][0] = a.z; n[2][1] = b.z; n[2][2] = c.z; n[2][3] = d.z;
-      n[3][0] = a.w; n[3][1] = b.w; n[3][2] = c.w; n[3][3] = d.w;
+      n[0][0] = a.x; n[0][1] = a.y; n[0][2] = a.z; n[0][3] = a.w;
+      n[1][0] = b.x; n[1][1] = b.y; n[1][2] = b.z; n[1][3] = b.w;
+      n[2][0] = c.x; n[2][1] = c.y; n[2][2] = c.z; n[2][3] = c.w;
+      n[3][0] = d.x; n[3][1] = d.y; n[3][2] = d.z; n[3][3] = d.w;
     }
 
     // Makes the matrix an identity matrix
@@ -76,51 +76,129 @@ public:
       return (*reinterpret_cast<const Vector4f *>(n[j]));
     }
 
+    Vector4f col(int j) {
+      float a = (*this)[0][j];
+      float b = (*this)[1][j];
+      float c = (*this)[2][j];
+      float d = (*this)[3][j];
+      return Vector4f(a, b, c, d);
+    }
+
+    const Vector4f col(int j) const {
+      float a = (*this)[0][j];
+      float b = (*this)[1][j];
+      float c = (*this)[2][j];
+      float d = (*this)[3][j];
+      return Vector4f(a, b, c, d);
+    }
+
     // Make a matrix rotate about various axis
-    Matrix4f MakeRotationX(float t){
-        // TODO:
-        return(Matrix4f()); // You will need to modify this.
-                            // When you test, test against glm_gtx_transform
-    }
-    Matrix4f MakeRotationY(float t){
-        // TODO:
-        return(Matrix4f()); // You will need to modify this.
-                            // When you test, test against glm_gtx_transform
-    }
-    Matrix4f MakeRotationZ(float t){
-        // TODO:
-        return(Matrix4f()); // You will need to modify this.
-                            // When you test, test against glm_gtx_transform
-    }
-    Matrix4f MakeScale(float sx,float sy, float sz){
-        // TODO:
-        return(Matrix4f()); // You will need to modify this.
-                            // When you test, test against glm_gtx_transform
-    }
-
-
+    Matrix4f MakeRotationX(float t);
+    Matrix4f MakeRotationY(float t);
+    Matrix4f MakeRotationZ(float t);
+    Matrix4f MakeScale(float sx,float sy, float sz);
 };
-
-// Matrix Multiplication
-Matrix4f operator *(const Matrix4f& A, const Matrix4f& B){
-  // TODO:
-  Matrix4f mat4;
-
-  return mat4;
-}
 
 // Matrix multiply by a vector
 
-Vector4f operator *(const Matrix4f& M, const Vector4f& v){
-  // TODO:
-  float x = (M[0][0] * v[0]) + (M[0][1] * v[0]) + (M[0][2] * v[0]) + (M[0][3] * v[0]);
-  float y = (M[1][0] * v[0]) + (M[1][1] * v[0]) + (M[1][2] * v[0]) + (M[1][3] * v[0]);
-  float z = (M[2][0] * v[0]) + (M[2][1] * v[0]) + (M[2][2] * v[0]) + (M[2][3] * v[0]);
-  float w = (M[3][0] * v[0]) + (M[3][1] * v[0]) + (M[3][2] * v[0]) + (M[3][3] * v[0]);
+Vector4f operator*(const Matrix4f& M, const Vector4f& v) {
+  float x = Dot(M[0], v);
+  float y = Dot(M[1], v);
+  float z = Dot(M[2], v);
+  float w = Dot(M[3], v);
 
   Vector4f vec = Vector4f(x, y, z, w);
   return vec;
 }
 
+// Matrix Multiplication
+Matrix4f operator *(const Matrix4f& A, const Matrix4f& B) {
+  // TODO:
+  float a = Dot(A[0], B.col(0));
+  float b = Dot(A[0], B.col(1));
+  float c = Dot(A[0], B.col(2));
+  float d = Dot(A[0], B.col(3));
+  Vector4f v(a, b, c, d);
+
+  float a1 = Dot(A[1], B.col(0));
+  float b1 = Dot(A[1], B.col(1));
+  float c1 = Dot(A[1], B.col(2));
+  float d1 = Dot(A[1], B.col(3));
+  Vector4f v1(a1, b1, c1, d1);
+
+  float a2 = Dot(A[2], B.col(0));
+  float b2 = Dot(A[2], B.col(1));
+  float c2 = Dot(A[2], B.col(2));
+  float d2 = Dot(A[2], B.col(3));
+  Vector4f v2(a2, b2, c2, d2);
+
+  float a3 = Dot(A[3], B.col(0));
+  float b3 = Dot(A[3], B.col(1));
+  float c3 = Dot(A[3], B.col(2));
+  float d3 = Dot(A[3], B.col(3));
+  Vector4f v3(a3, b3, c3, d3);
+
+  Matrix4f mat4(v, v1, v2, v3);
+  return mat4;
+}
+
+Matrix4f Matrix4f::MakeRotationX(float t) {
+  // TODO:
+  Matrix4f mat;
+  mat.identity();
+
+  mat[1][1] = cos(t);
+  mat[1][2] = -sin(t);
+  mat[2][1] = sin(t);
+  mat[2][2] = cos(t);
+
+  mat = *this * mat;
+
+  return (mat);
+}
+
+Matrix4f Matrix4f::MakeRotationY(float t) {
+  // TODO:
+  Matrix4f mat;
+  mat.identity();
+
+  mat[0][0] = cos(t);
+  mat[0][2] = sin(t);
+  mat[2][0] = -sin(t);
+  mat[2][2] = cos(t);
+
+  mat = *this * mat;
+
+  return (mat);
+}
+
+Matrix4f Matrix4f::MakeRotationZ(float t) {
+  // TODO:
+  Matrix4f mat;
+  mat.identity();
+
+  mat[0][0] = cos(t);
+  mat[0][1] = -sin(t);
+  mat[1][0] = sin(t);
+  mat[1][1] = cos(t);
+
+  mat = *this * mat;
+
+  return (mat);
+}
+
+Matrix4f Matrix4f::MakeScale(float sx, float sy, float sz) {
+  // TODO:
+  Matrix4f mat;
+  mat.identity();
+
+  mat[0][0] = sx;
+  mat[1][1] = sy;
+  mat[2][2] = sz;
+
+  mat = *this * mat;
+
+  return (mat);
+}
 
 #endif

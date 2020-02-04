@@ -146,6 +146,19 @@ inline Vector4f operator-(const Vector4f& v) {
   return vec;
 }
 
+// Negation of a vector
+// Use Case: Sometimes it is handy to apply a force in an opposite direction
+inline bool operator==(const Vector4f& A, const Vector4f& B) {
+  Vector4f vec;
+
+  return (
+    A[0] == B[0] &&
+    A[1] == B[1] &&
+    A[2] == B[2] &&
+    A[3] == B[3]
+  );
+}
+
 // Return the magnitude of a vector
 inline float Magnitude(const Vector4f& v) {
   float sum = 0;

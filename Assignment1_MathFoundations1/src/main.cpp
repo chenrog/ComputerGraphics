@@ -171,22 +171,41 @@ bool VectorUnitTest9() {
 // MATRIX TESTS
 
 bool compareMat(Matrix4f mat, glm::mat4 mat2) {
-  return (mat[0][0] == mat2[0][0] &&
-          mat[0][1] == mat2[0][1] &&
-          mat[0][2] == mat2[0][2] &&
-          mat[0][3] == mat2[0][3] &&
-          mat[1][0] == mat2[1][0] &&
-          mat[1][1] == mat2[1][1] &&
-          mat[1][2] == mat2[1][2] &&
-          mat[1][3] == mat2[1][3] &&
-          mat[2][0] == mat2[2][0] &&
-          mat[2][1] == mat2[2][1] &&
-          mat[2][2] == mat2[2][2] &&
-          mat[2][3] == mat2[2][3] &&
-          mat[3][0] == mat2[3][0] &&
-          mat[3][1] == mat2[3][1] &&
-          mat[3][2] == mat2[3][2] &&
-          mat[3][3] == mat2[3][3]);
+  return (
+      mat[0][0] == mat2[0][0] && mat[0][1] == mat2[1][0] &&
+      mat[0][2] == mat2[2][0] && mat[0][3] == mat2[3][0] &&
+      mat[1][0] == mat2[0][1] && mat[1][1] == mat2[1][1] &&
+      mat[1][2] == mat2[2][1] && mat[1][3] == mat2[3][1] &&
+      mat[2][0] == mat2[0][2] && mat[2][1] == mat2[1][2] &&
+      mat[2][2] == mat2[2][2] && mat[2][3] == mat2[3][2] &&
+      mat[3][0] == mat2[0][3] && mat[3][1] == mat2[1][3] &&
+      mat[3][2] == mat2[2][3] && mat[3][3] == mat2[3][3]);
+}
+
+void printMat(Matrix4f mat) {
+  std::cout << mat[0][0] << "," << mat[0][1] << "," << mat[0][2] << ","
+            << mat[0][3] << std::endl;
+  std::cout << mat[1][0] << "," << mat[1][1] << "," << mat[1][2] << ","
+            << mat[1][3] << std::endl;
+  std::cout << mat[2][0] << "," << mat[2][1] << "," << mat[2][2] << ","
+            << mat[2][3] << std::endl;
+  std::cout << mat[3][0] << "," << mat[3][1] << "," << mat[3][2] << ","
+            << mat[3][3] << std::endl;
+  std::cout << std::endl;
+  return;
+}
+
+void printMat(glm::mat4 mat) {
+  std::cout << mat[0][0] << "," << mat[0][1] << "," << mat[0][2] << ","
+            << mat[0][3] << std::endl;
+  std::cout << mat[1][0] << "," << mat[1][1] << "," << mat[1][2] << ","
+            << mat[1][3] << std::endl;
+  std::cout << mat[2][0] << "," << mat[2][1] << "," << mat[2][2] << ","
+            << mat[2][3] << std::endl;
+  std::cout << mat[3][0] << "," << mat[3][1] << "," << mat[3][2] << ","
+            << mat[3][3] << std::endl;
+  std::cout << std::endl;
+  return;
 }
 
 // Identity Matrix
@@ -204,14 +223,14 @@ bool unitTest0() {
   return false;
 }
 
-// Sample unit test comparing against GLM.
+// Identity Matrix with vectors
 bool unitTest1() {
-  glm::mat4 glmIdentityMatrix = glm::mat4(1.0f);
   Vector4f a(1.0f, 0.0f, 0.0f, 0.0f);
   Vector4f b(0.0f, 1.0f, 0.0f, 0.0f);
   Vector4f c(0.0f, 0.0f, 1.0f, 0.0f);
   Vector4f d(0.0f, 0.0f, 0.0f, 1.0f);
   Matrix4f myIdentity(a, b, c, d);
+  glm::mat4 glmIdentityMatrix = glm::mat4(1.0f);
 
   if (compareMat(myIdentity, glmIdentityMatrix)) {
     return true;
@@ -220,7 +239,7 @@ bool unitTest1() {
   return false;
 }
 
-// Sample unit test comparing against GLM.
+// Extra Constructor
 bool unitTest2() {
   Matrix4f mat(3.0f);
   glm::mat4 mat2 = glm::mat4(3.0f);
@@ -232,32 +251,25 @@ bool unitTest2() {
   return false;
 }
 
-// Sample unit test comparing against GLM.
-// TODO: Test against glm::scale
+// Test against glm::scale
 bool unitTest3() {
-  glm::mat4 glmScale = glm::mat4(2.0f);
   Vector4f a(1.0f, 0, 0, 0);
   Vector4f b(0.0f, 1.0f, 0, 0);
   Vector4f c(0, 0, 1.0f, 0);
   Vector4f d(0, 0, 0, 1.0f);
   Matrix4f myScaled(a, b, c, d);
-  myScaled.MakeScale(2.0f, 2.0f, 2.0f);
+  myScaled = myScaled.MakeScale(1.2f, 3.0f, 4.5f);
 
-  if (glmScale[0][0] == myScaled[0][0] && glmScale[0][1] == myScaled[0][1] &&
-      glmScale[0][2] == myScaled[0][2] && glmScale[0][3] == myScaled[0][3] &&
-      glmScale[1][0] == myScaled[1][0] && glmScale[1][1] == myScaled[1][1] &&
-      glmScale[1][2] == myScaled[1][2] && glmScale[1][3] == myScaled[1][3] &&
-      glmScale[2][0] == myScaled[2][0] && glmScale[2][1] == myScaled[2][1] &&
-      glmScale[2][2] == myScaled[2][2] && glmScale[2][3] == myScaled[2][3] &&
-      glmScale[3][0] == myScaled[3][0] && glmScale[3][1] == myScaled[3][1] &&
-      glmScale[3][2] == myScaled[3][2] && glmScale[3][3] == myScaled[3][3]) {
+  glm::mat4 glmScale = glm::mat4(1.0f);
+  glmScale = glm::scale(glmScale, glm::vec3(1.2f, 3.0f, 4.5f));
+
+  if (compareMat(myScaled, glmScale)) {
     return true;
   }
 
   return false;
 }
 
-// Sample unit test comparing against GLM.
 // Testing operator
 bool unitTest4() {
   glm::mat4 glmTest = glm::mat4(1.0f);
@@ -276,33 +288,120 @@ bool unitTest4() {
   return false;
 }
 
-// Sample unit test testing your library
+// col getter
 bool unitTest5() {
-  Vector4f a(1, 1, 1, 1);
-  Vector4f b(0, 0, 0, 0);
-  Vector4f c = a + b;
+  Matrix4f mat(3.0f);
+  Vector4f v(0, 3.0f, 0, 0);
 
-  if (c.x == 1 && c.y == 1 && c.z == 1 && c.w == 1) {
+  if (mat.col(1) == v) {
     return true;
   }
+
   return false;
 }
 
-// Sample unit test comparing against GLM.
+// mat * vector
 bool unitTest6() {
   glm::mat4 mat2 = glm::mat4(3.0f);
   mat2[1][3] = 72.0f;
   mat2[2][3] = 2.1f;
   glm::vec4 v2 = glm::vec4(2.0f);
+  v2[3] = 3.0f;
   v2 = mat2 * v2;
 
   Matrix4f mat(3.0f);
   mat[3][1] = 72.0f;
   mat[3][2] = 2.1f;
   Vector4f v(2.0f);
+  v[3] = 3.0f;
   v = mat * v;
 
   if (compareVec(v, v2)) {
+    return true;
+  }
+
+  return false;
+}
+
+// mat * mat
+bool unitTest7() {
+  glm::mat4 mat2 = glm::mat4(3.0f);
+  mat2[1][3] = 72.0f;
+  mat2[2][3] = 2.1f;
+  glm::mat4 mat4 = glm::mat4(3.0f);
+  mat2[2][0] = 72.0f;
+  mat2[1][1] = 2.1f;
+  mat2 = mat2 * mat4;
+
+  Matrix4f mat(3.0f);
+  mat[3][1] = 72.0f;
+  mat[3][2] = 2.1f;
+  Matrix4f mat3(3.0f);
+  mat[0][2] = 72.0f;
+  mat[1][1] = 2.1f;
+  mat = mat * mat3;
+
+  if (compareMat(mat, mat2)) {
+    return true;
+  }
+
+  return false;
+}
+
+// RotationX
+bool unitTest8() {
+  Matrix4f mat(3.0f);
+  mat[3][1] = 72.0f;
+  mat[3][2] = 2.1f;
+
+  glm::mat4 glmMat = glm::mat4(3.0f);
+  glmMat[1][3] = 72.0f;
+  glmMat[2][3] = 2.1f;
+
+  float angle = .454;
+  mat = mat.MakeRotationX(angle);
+  glmMat = glm::rotate(glmMat, angle, glm::vec3(1, 0, 0));
+  if (compareMat(mat, glmMat)) {
+    return true;
+  }
+
+  return false;
+}
+
+// RotationY
+bool unitTest9() {
+  Matrix4f mat(3.0f);
+  mat[3][1] = 72.0f;
+  mat[3][2] = 2.1f;
+
+  glm::mat4 glmMat = glm::mat4(3.0f);
+  glmMat[1][3] = 72.0f;
+  glmMat[2][3] = 2.1f;
+
+  float angle = .454;
+  mat = mat.MakeRotationY(angle);
+  glmMat = glm::rotate(glmMat, angle, glm::vec3(0, 1, 0));
+  if (compareMat(mat, glmMat)) {
+    return true;
+  }
+
+  return false;
+}
+
+// RotationZ
+bool unitTest10() {
+  Matrix4f mat(3.0f);
+  mat[3][1] = 72.0f;
+  mat[3][2] = 2.1f;
+
+  glm::mat4 glmMat = glm::mat4(3.0f);
+  glmMat[1][3] = 72.0f;
+  glmMat[2][3] = 2.1f;
+
+  float angle = .454;
+  mat = mat.MakeRotationZ(angle);
+  glmMat = glm::rotate(glmMat, angle, glm::vec3(0, 0, 1));
+  if (compareMat(mat, glmMat)) {
     return true;
   }
 
@@ -335,6 +434,10 @@ int main() {
   std::cout << "Passed 4: " << unitTest4() << " \n";
   std::cout << "Passed 5: " << unitTest5() << " \n";
   std::cout << "Passed 6: " << unitTest6() << " \n";
+  std::cout << "Passed 7: " << unitTest7() << " \n";
+  std::cout << "Passed 8: " << unitTest8() << " \n";
+  std::cout << "Passed 9: " << unitTest9() << " \n";
+  std::cout << "Passed 10: " << unitTest10() << " \n";
 
   return 0;
 }
