@@ -1,24 +1,25 @@
 #include "BasicWidget.h"
 
-BasicWidget::BasicWidget(QWidget* parent) : QWidget(parent), buffer_(800, 600), minYVert_(-1, -1, 0), midYVert_(0, 1, 0), maxYVert_(1, -1, 0)
-{
+BasicWidget::BasicWidget(QWidget* parent)
+    : QWidget(parent),
+      buffer_(800, 600),
+      minYVert_(-1, -1, 0),
+      midYVert_(0, 1, 0),
+      maxYVert_(1, -1, 0) {
   prevTicks_ = QDateTime::currentMSecsSinceEpoch();
   yAxisRotation_ = 0.0f;
-  projection_.InitPerspective(90.0f, 800./600., 0.1f, 1000.0f);
+  projection_.InitPerspective(90.0f, 800. / 600., 0.1f, 1000.0f);
 }
 
-BasicWidget::~BasicWidget()
-{}
+BasicWidget::~BasicWidget() {}
 
-void BasicWidget::resizeEvent(QResizeEvent* event)
-{
+void BasicWidget::resizeEvent(QResizeEvent* event) {
   QWidget::resizeEvent(event);
   buffer_.setSize(size());
   projection_.InitPerspective(90.0f, width() / height(), 0.1, 1000.0);
 }
 
-void BasicWidget::paintEvent(QPaintEvent* event)
-{
+void BasicWidget::paintEvent(QPaintEvent* event) {
   Q_UNUSED(event);
 
   qint64 curTicks = QDateTime::currentMSecsSinceEpoch();
@@ -30,8 +31,7 @@ void BasicWidget::paintEvent(QPaintEvent* event)
   translation_.InitTranslation(0.0, 0.0, 3.0);
   rotation_.InitRotation(0.0, yAxisRotation_, 0.0);
 
-  // TODO:  Make sure our transform is correct! (Apply our transforms)
-  transform_ = transform_;
+  transform_ = projection_.Multiply(translation_).Multiply(rotation_);
 
   buffer_.clearImage();
   Vertex v0 = maxYVert_.Transform(transform_);
