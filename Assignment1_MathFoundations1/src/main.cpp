@@ -14,8 +14,10 @@
 // Sample unit test comparing against GLM.
 bool unitTest0() {
   glm::mat4 glmIdentityMatrix = glm::mat4(1.0f);
-  Matrix4f myIdentity(1.0f, 0, 0, 0, 0, 1.0f, 0, 0, 0, 0, 1.0f, 0, 0, 0, 0,
-                      1.0f);
+  Matrix4f myIdentity(1.0f, 0, 0, 0,
+                      0, 1.0f, 0, 0,
+                      0, 0, 1.0f, 0,
+                      0, 0, 0, 1.0f);
 
   if (glmIdentityMatrix[0][0] == myIdentity[0][0] &&
       glmIdentityMatrix[0][1] == myIdentity[0][1] &&
@@ -41,8 +43,10 @@ bool unitTest0() {
 
 bool unitTest1() {
   glm::mat4 glmIdentityMatrix = glm::mat4(1.0f);
-  Matrix4f myIdentity(1.0f, 0, 0, 0, 0, 1.0f, 0, 0, 0, 0, 1.0f, 0, 0, 0, 0,
-                      1.0f);
+  Matrix4f myIdentity(1.0f, 0, 0, 0,
+                      0, 1.0f, 0, 0,
+                      0, 0, 1.0f, 0,
+                      0, 0, 0, 1.0f);
 
   if (glmIdentityMatrix[0][0] == myIdentity(0, 0) &&
       glmIdentityMatrix[0][1] == myIdentity(0, 1) &&
