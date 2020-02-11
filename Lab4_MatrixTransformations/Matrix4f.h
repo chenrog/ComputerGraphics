@@ -180,29 +180,35 @@ class Matrix4f {
     // TODO: Implement transform
     //       The pattern is given for the first component of the vector.
     //       Fill in the values for the '0.0' for y,z,w
-    float x = b.GetX();
-    float y = b.GetY();
-    float z = b.GetZ();
-    float w = b.GetW();
+        return Vector4f(
+            m[0][0] * b.GetX() + m[0][1] * b.GetY() + m[0][2] * b.GetZ() + m[0][3] * b.GetW(),
+            m[1][0] * b.GetX() + m[1][1] * b.GetY() + m[1][2] * b.GetZ() + m[1][3] * b.GetW(),
+            m[2][0] * b.GetX() + m[2][1] * b.GetY() + m[2][2] * b.GetZ() + m[2][3] * b.GetW(),
+            m[3][0] * b.GetX() + m[3][1] * b.GetY() + m[3][2] * b.GetZ() + m[3][3] * b.GetW());
+	}
 
-    return Vector4f(m[0][0] * x + m[0][1] * y + m[0][2] * z + m[0][3] * w,
-                    m[1][0] * x + m[1][1] * y + m[1][2] * z + m[1][3] * w,
-                    m[2][0] * x + m[2][1] * y + m[2][2] * z + m[2][3] * w,
-                    m[3][0] * x + m[3][1] * y + m[3][2] * z + m[3][3] * w);
-  }
 
-  // Here is an example of how to do a slow matrix multiplication with loops.
-  // (Note: It is possible a smart enough compiler would unroll the values, but
-  //        typically it is best to explicitly perform the individual dot
-  //        products).
-  Matrix4f Multiply(Matrix4f b) {
-    Matrix4f result;
-    for (int i = 0; i < 4; i++) {
-      for (int j = 0; j < 4; j++) {
-        float dot = m[i][0] * b.Get(0, j) + m[i][1] * b.Get(1, j) +
-                    m[i][2] * b.Get(2, j) + m[i][3] * b.Get(3, j);
-        result.Set(i, j, dot);
-      }
+    // Here is an example of how to do a slow matrix multiplication with loops.
+    // (Note: It is possible a smart enough compiler would unroll the values, but
+    //        typically it is best to explicitly perform the individual dot products).
+    Matrix4f Multiply(Matrix4f b){
+        Matrix4f result;
+        for(int i=0; i < 4; i++){
+            for(int j =0; j < 4; j++){
+                float dot = m[i][0] * b.Get(0,j)+
+                            m[i][1] * b.Get(1,j)+
+                            m[i][2] * b.Get(2,j)+
+                            m[i][3] * b.Get(3,j);
+                result.Set(i,j,dot); 
+            }
+        }
+
+        return result;
+    }
+    
+    // Set index of matrix to a value
+    void Set(unsigned int i, unsigned int j, float value){
+        m[i][j] = value;
     }
 
     return result;
