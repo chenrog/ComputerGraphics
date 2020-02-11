@@ -11,6 +11,10 @@
   setFocusPolicy(Qt::StrongFocus);
 }
 
+bool isSquare = false;
+int triIdxCount = 3;
+int squareIdxCount = 6;
+
 BasicWidget::~BasicWidget()
 {
 #if USE_QT_OPENGL
@@ -145,9 +149,11 @@ void BasicWidget::keyReleaseEvent(QKeyEvent* keyEvent)
   // Handle key events here.
   if (keyEvent->key() == Qt::Key_Left) {
     qDebug() << "Left Arrow Pressed";
+    isSquare = false;
     update();  // We call update after we handle a key press to trigger a redraw when we are ready
   } else if (keyEvent->key() == Qt::Key_Right) {
     qDebug() << "Right Arrow Pressed";
+    isSquare = true;
     update();  // We call update after we handle a key press to trigger a redraw when we are ready
   } else {
     qDebug() << "You Pressed an unsupported Key!";
@@ -176,9 +182,9 @@ void BasicWidget::initializeGL()
   static const GLfloat verts[12] =
   {
 	-0.8f, -0.8f, 0.0f, // Left vertex position
-	0.8f, -0.8f, 0.0f,  // right vertex position
+	 0.8f, -0.8f, 0.0f,  // right vertex position
 	-0.8f,  0.8f, 0.0f,  // Top vertex position
-    0.8f, 0.8f, 0.0f
+   0.8f,  0.8f, 0.0f
   };
   // Define our vert colors
   static const GLfloat colors[16] =
@@ -205,9 +211,18 @@ void BasicWidget::initializeGL()
   vbo_.bind();
   vbo_.allocate(verts, 12 * sizeof(GL_FLOAT));
 
-  // TODO:  Generate our color buffer
+  // TODO(MAYBE):  Generate our color buffer
+  cbo_.setUsagePattern(QOpenGLBuffer::StaticDraw);
+  cbo_.create();
+  cbo_.bind();
+  cbo_.allocate(colors, 16 * sizeof(GL_FLOAT));
   // ENDTODO
-  // TODO:  Generate our index buffer
+
+  // TODO(MAYBE):  Generate our index buffer
+  ibo_.setUsagePattern(QOpenGLBuffer::StaticDraw);
+  ibo_.create();
+  ibo_.bind();
+  ibo_.allocate(idx, 6 * sizeof(GL_INT));
   // ENDTODO
 
   // Create a VAO to keep track of things for us.
@@ -259,8 +274,9 @@ void BasicWidget::paintGL()
 #if USE_QT_OPENGL
   shaderProgram_.bind();
   vao_.bind();
-  // TODO: Change number of indices drawn
-  glDrawElements(GL_TRIANGLES, ??, GL_UNSIGNED_INT, 0);
+  // TODO(DONE): Change number of indices drawn
+  int idxCount = isSquare ? squareIdxCount : triIdxCount;
+  glDrawElements(GL_TRIANGLES, idxCount, GL_UNSIGNED_INT, 0);
   // ENDTODO
   vao_.release();
   shaderProgram_.release();
