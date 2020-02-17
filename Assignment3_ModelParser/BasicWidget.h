@@ -12,6 +12,10 @@ class BasicWidget : public QOpenGLWidget, protected QOpenGLFunctions
   Q_OBJECT
 
 private:
+  QString vertexShaderString() const;
+  QString fragmentShaderString() const;
+  void createShader();
+  QOpenGLVertexArrayObject vao_;
 
 protected:
   // Required interaction overrides
@@ -21,6 +25,12 @@ protected:
   void initializeGL() override;
   void resizeGL(int w, int h) override;
   void paintGL() override;
+
+  void load(std::string fileName);
+
+  std::string modelName;
+  std::string bunny = "bunny_centered.obj";
+  std::string monkey = "monkey_centered.obj";
 
   QOpenGLBuffer vbo_;
   QOpenGLBuffer cbo_;

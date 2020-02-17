@@ -17,8 +17,8 @@ include_directories(
 )
 
 set(srcs
-  BasicWidget.cpp
   Application.cpp
+  BasicWidget.cpp
   Helper.cpp
   main.cpp
 )
