@@ -19,7 +19,7 @@ include_directories(
 set(srcs
   Application.cpp
   BasicWidget.cpp
-  Helper.cpp
+  ObjParser.cpp
   main.cpp
 )
 
