@@ -22,10 +22,15 @@ protected:
   void resizeGL(int w, int h) override;
   void paintGL() override;
 
+  QOpenGLBuffer vbo_;
+  QOpenGLBuffer cbo_;
+  QOpenGLBuffer ibo_;
+  QOpenGLShaderProgram shaderProgram_;
+
 public:
   BasicWidget(QWidget* parent=nullptr);
   virtual ~BasicWidget();
-  
+
   // Make sure we have some size that makes sense.
   QSize sizeHint() const {return QSize(800,600);}
 };

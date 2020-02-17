@@ -18,10 +18,25 @@ BasicWidget::~BasicWidget()
 // Protected
 void BasicWidget::keyReleaseEvent(QKeyEvent* keyEvent)
 {
-  // TODO
   // Handle key events here.
-  qDebug() << "You Pressed an unsupported Key!";
-  // ENDTODO
+  int key = keyEvent->key();
+
+  if (key == Qt::Key_1) {
+    qDebug() << "Render Bunny";
+  }
+  else if (key == Qt::Key_2){
+    qDebug() << "Render Monkey";
+  }
+  else if (key == Qt::Key_W) {
+    qDebug() << "Render Wireframe";
+  }
+  else if (key == Qt::Key_Q) {
+    qDebug() << "Quit";
+    std::exit(0);
+  }
+  else {
+    qDebug() << "You Pressed an unsupported Key!";
+  }
 }
 void BasicWidget::initializeGL()
 {
