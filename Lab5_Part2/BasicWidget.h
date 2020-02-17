@@ -41,16 +41,14 @@ protected:
   GLuint cboID_;
   unsigned int shaderID_;
 
-  unsigned int compileShader(unsigned int type, const QString& shaderSrc);
-  
 #endif
 
-  
-  
+
+
 public:
   BasicWidget(QWidget* parent=nullptr);
   virtual ~BasicWidget();
-  
+
   // Make sure we have some size that makes sense.
   QSize sizeHint() const {return QSize(800,600);}
 };
