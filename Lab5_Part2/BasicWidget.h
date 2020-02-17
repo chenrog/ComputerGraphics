@@ -30,18 +30,10 @@ protected:
   void resizeGL(int w, int h) override;
   void paintGL() override;
 
-#if USE_QT_OPENGL
   QOpenGLBuffer vbo_;
   QOpenGLBuffer ibo_;
   QOpenGLBuffer cbo_;
   QOpenGLShaderProgram shaderProgram_;
-#else
-  GLuint vboID_;
-  GLuint iboID_;
-  GLuint cboID_;
-  unsigned int shaderID_;
-
-#endif
 
 
 
