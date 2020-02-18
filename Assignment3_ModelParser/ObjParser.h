@@ -9,14 +9,17 @@
 
 class ObjParser {
  private:
+  ObjParser();
+  ObjParser(ObjParser const&);
+  virtual ~ObjParser();
+
  protected:
   QVector<float> vertices;
   QVector<float> vertex_normals;
   QVector<uint> indices;
 
  public:
-  ObjParser();
-  virtual ~ObjParser();
+  static ObjParser* Instance();
 
   void parse(std::string fileName);
   QVector<float> getVertices();

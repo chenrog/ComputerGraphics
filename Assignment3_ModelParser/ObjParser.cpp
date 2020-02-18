@@ -1,10 +1,22 @@
 #include "ObjParser.h"
 
+ObjParser* OP_Instance = NULL;
+
 //////////////////////////////////////////////////////////////////////
 // Publics
 ObjParser::ObjParser() {}
 
+ObjParser::ObjParser(ObjParser const&) {}
+
 ObjParser::~ObjParser() {}
+
+ObjParser* ObjParser::Instance() {
+  if (!OP_Instance) {
+    OP_Instance = new ObjParser;
+  }
+
+  return OP_Instance;
+}
 
 void ObjParser::parse(std::string fileName) {
   std::ifstream file;
