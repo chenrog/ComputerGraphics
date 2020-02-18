@@ -22,6 +22,10 @@ void ObjParser::parse(std::string fileName) {
   std::ifstream file;
   file.open("./objects/" + fileName);
 
+  vertex_normals.clear();
+  vertices.clear();
+  indices.clear();
+
   std::string line;
   while (getline(file, line)) {
     QString qline = QString::fromStdString(line);
