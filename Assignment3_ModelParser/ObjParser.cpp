@@ -42,7 +42,7 @@ void ObjParser::parse(std::string fileName) {
     // face
     else if (line[0] == 'f') {
       for (int i = 0; i < data.size(); i++) {
-        indices.push_back(data[i].toUInt());
+        indices.push_back(data[i].toUInt() - 1);
       }
     }
   }
