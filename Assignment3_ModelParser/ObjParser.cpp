@@ -26,6 +26,7 @@ void ObjParser::parse(std::string fileName) {
   while (getline(file, line)) {
     QString qline = QString::fromStdString(line);
     QStringList data = qline.split(' ', QString::SkipEmptyParts);
+    data.takeFirst();  // removes the type from array so only numbers
 
     // vertex normal
     if (line[0] == 'v' && line[1] == 'n') {
@@ -42,7 +43,11 @@ void ObjParser::parse(std::string fileName) {
     // face
     else if (line[0] == 'f') {
       for (int i = 0; i < data.size(); i++) {
-        indices.push_back(data[i].toUInt() - 1);
+        QStringList tuple = data[i].split("//");
+        uint vertex = tuple[0].toUInt() - 1;
+        uint vertexNormal = tuple[1].toUInt() - 1;
+        std::cout << vertex << std::endl;
+        indices.push_back(vertex);
       }
     }
   }
