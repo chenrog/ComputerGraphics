@@ -46,7 +46,6 @@ void ObjParser::parse(std::string fileName) {
         QStringList tuple = data[i].split("//");
         uint vertex = tuple[0].toUInt() - 1;
         uint vertexNormal = tuple[1].toUInt() - 1;
-        std::cout << vertex << std::endl;
         indices.push_back(vertex);
       }
     }
