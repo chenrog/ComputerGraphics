@@ -38,6 +38,10 @@ void ObjParser::parse(std::string fileName) {
         vertex_normals.push_back(data[i].toFloat());
       }
     }
+    // vertex texure, we ignore this for now but would mess with vertex
+    else if (line[0] == 'v' && line[1] == 't') {
+      continue;
+    }
     // vertex
     else if (line[0] == 'v') {
       for (int i = 0; i < data.size(); i++) {
@@ -53,7 +57,13 @@ void ObjParser::parse(std::string fileName) {
         indices.push_back(vertex);
       }
     }
+    // nothing valid
+    else {
+      continue;
+    }
   }
+
+  file.close();
 }
 
 QVector<float> ObjParser::getVertices() { return vertices; }
