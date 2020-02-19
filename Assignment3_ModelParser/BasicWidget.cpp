@@ -8,33 +8,22 @@
 BasicWidget::BasicWidget(QWidget* parent)
     : QOpenGLWidget(parent),
       vbo_(QOpenGLBuffer::VertexBuffer),
-      cbo_(QOpenGLBuffer::VertexBuffer),
       ibo_(QOpenGLBuffer::IndexBuffer) {
   setFocusPolicy(Qt::StrongFocus);
 }
 
-static const GLfloat verts[12] = {-0.8f, -0.8f, 0.0f,  // Left vertex position
-                                  0.8f,  -0.8f, 0.0f,  // right vertex position
-                                  -0.8f, 0.8f,  0.0f,  // Top vertex position
-                                  0.8f,  0.8f,  0.0f};
-// Define our vert colors
-static const GLfloat colors[16] = {
-    1.0f, 0.0f, 0.0f, 1.0f,  // red
-    0.0f, 1.0f, 0.0f, 1.0f,  // green
-    0.0f, 0.0f, 1.0f, 1.0f,  // blue
-    1.0f, 1.0f, 0.0f, 1.0f   // yellow
-};
-static const GLfloat colors2[16] = {1.0f, 0.0f, 0.0f, 1.0f};
+// GLfloat verts[12] = {-0.8f, -0.8f, 0.0f,  // Left vertex position
+//                      0.8f,  -0.8f, 0.0f,  // right vertex position
+//                      -0.8f, 0.8f,  0.0f,  // Top vertex position
+//                      0.8f,  0.8f,  0.0f};
 // Define our indices
-static const GLuint idx[6] = {0, 1, 2, 2, 1, 3};
+// static const GLuint idx[6] = {0, 1, 2, 2, 1, 3};
 
 BasicWidget::~BasicWidget() {
   vbo_.release();
   vbo_.destroy();
   ibo_.release();
   ibo_.destroy();
-  cbo_.release();
-  cbo_.destroy();
   vao_.release();
   vao_.destroy();
 }
@@ -45,12 +34,9 @@ QString BasicWidget::vertexShaderString() const {
   QString str =
       "#version 330\n"
       "layout(location = 0) in vec3 position;\n"
-      "layout(location = 1) in vec4 color;\n"
-      "out vec4 vertColor;\n"
       "void main()\n"
       "{\n"
       "  gl_Position = vec4(position, 1.0);\n"
-      "  vertColor = color;\n"
       "}\n";
   return str;
 }
@@ -58,11 +44,10 @@ QString BasicWidget::vertexShaderString() const {
 QString BasicWidget::fragmentShaderString() const {
   QString str =
       "#version 330\n"
-      "in vec4 vertColor;\n"
       "out vec4 color;\n"
       "void main()\n"
       "{\n"
-      "  color = vertColor;\n"
+      "  color = vec4(1.0f, 0.5f, 0.5f, 1.0f);\n"
       "}\n";
   return str;
 }
@@ -100,8 +85,13 @@ void BasicWidget::keyReleaseEvent(QKeyEvent* keyEvent) {
     qDebug() << "Render Monkey";
     load(MONKEY);
     update();
+  } else if (key == Qt::Key_3) {
+    qDebug() << "Render Cube";
+    load("cube.obj");
+    update();
   } else if (key == Qt::Key_W) {
-    qDebug() << "Render Wireframe";
+    qDebug() << "Wireframe On/Off";
+    setWireframe();
     update();
   } else if (key == Qt::Key_Q) {
     qDebug() << "Quit";
@@ -137,8 +127,6 @@ void BasicWidget::initializeGL() {
   // create the buffers
   vbo_.setUsagePattern(QOpenGLBuffer::StaticDraw);
   vbo_.create();
-  cbo_.setUsagePattern(QOpenGLBuffer::StaticDraw);
-  cbo_.create();
   ibo_.setUsagePattern(QOpenGLBuffer::StaticDraw);
   ibo_.create();
   vao_.create();
@@ -151,15 +139,13 @@ void BasicWidget::initializeGL() {
   vbo_.bind();
   shaderProgram_.enableAttributeArray(0);
   shaderProgram_.setAttributeBuffer(0, GL_FLOAT, 0, 3);
-  cbo_.bind();
-  shaderProgram_.enableAttributeArray(1);
-  shaderProgram_.setAttributeBuffer(1, GL_FLOAT, 0, 4);
   ibo_.bind();
   vao_.release();
 
   shaderProgram_.release();
 
   glViewport(0, 0, width(), height());
+  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 }
 
 void BasicWidget::resizeGL(int w, int h) { glViewport(0, 0, w, h); }
@@ -173,36 +159,40 @@ void BasicWidget::paintGL() {
 
   shaderProgram_.bind();
   vao_.bind();
-  // TODO(DONE): Change number of indices drawn
-  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-  // ENDTODO
+
+  ObjParser* objParser = ObjParser::Instance();
+  int index_count = objParser->getIndices().size();
+  glDrawElements(GL_TRIANGLES, index_count, GL_UNSIGNED_INT, 0);
+
   vao_.release();
   shaderProgram_.release();
-
-  // TODO:  render.
 }
 
-// void BasicWidget::load(std::string fileName)
-// {
-//   std::ifstream file;
-//   file.open("./objects/" + fileName);
-
-//   std::string line;
-//   while (getline(file, line)) {
-//     // vertex
-//     if (line[0] == 'v') {
-//       return;
-//     }
-//   }
-// }
+void BasicWidget::setWireframe() {
+  std::cout << wireframe << std::endl;
+  if (wireframe) {
+    std::cout << "true" << std::endl;
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    glViewport(0, 0, width(), height());
+    wireframe = false;
+  } else {
+    std::cout << "false" << std::endl;
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    glViewport(0, 0, width(), height());
+    wireframe = true;
+  }
+}
 
 void BasicWidget::load(std::string fileName) {
+  ObjParser* objParser = ObjParser::Instance();
+  objParser->parse(fileName);
+
   shaderProgram_.bind();
   vbo_.bind();
-  vbo_.allocate(verts, 12 * sizeof(GL_FLOAT));
-  cbo_.bind();
-  cbo_.allocate(colors, 16 * sizeof(GL_FLOAT));
+  vbo_.allocate(objParser->getVertices().constData(),
+                objParser->getVertices().size() * sizeof(GL_FLOAT));
   ibo_.bind();
-  ibo_.allocate(idx, 6 * sizeof(GL_INT));
+  ibo_.allocate(objParser->getIndices().constData(),
+                objParser->getIndices().size() * sizeof(GL_INT));
   shaderProgram_.release();
 }

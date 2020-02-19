@@ -3,6 +3,7 @@
 #include <QtGui>
 #include <QtOpenGL>
 #include <QtWidgets>
+#include "ObjParser.h"
 
 /**
  * This is just a basic OpenGL widget that will allow a change of background
@@ -26,14 +27,15 @@ class BasicWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   void resizeGL(int w, int h) override;
   void paintGL() override;
 
+  void setWireframe();
   void load(std::string fileName);
 
   std::string modelName;
   const std::string BUNNY = "bunny_centered.obj";
   const std::string MONKEY = "monkey_centered.obj";
+  bool wireframe = true;
 
   QOpenGLBuffer vbo_;
-  QOpenGLBuffer cbo_;
   QOpenGLBuffer ibo_;
   QOpenGLShaderProgram shaderProgram_;
 
