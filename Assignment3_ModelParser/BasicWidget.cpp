@@ -12,13 +12,6 @@ BasicWidget::BasicWidget(QWidget* parent)
   setFocusPolicy(Qt::StrongFocus);
 }
 
-// GLfloat verts[12] = {-0.8f, -0.8f, 0.0f,  // Left vertex position
-//                      0.8f,  -0.8f, 0.0f,  // right vertex position
-//                      -0.8f, 0.8f,  0.0f,  // Top vertex position
-//                      0.8f,  0.8f,  0.0f};
-// Define our indices
-// static const GLuint idx[6] = {0, 1, 2, 2, 1, 3};
-
 BasicWidget::~BasicWidget() {
   vbo_.release();
   vbo_.destroy();
@@ -34,9 +27,11 @@ QString BasicWidget::vertexShaderString() const {
   QString str =
       "#version 330\n"
       "layout(location = 0) in vec3 position;\n"
+      "out vec4 vertColor;\n"
       "void main()\n"
       "{\n"
       "  gl_Position = vec4(position, 1.0);\n"
+      "  vertColor = vec4(1.0f, 0.4f, 0.4f, 1.0f);\n"
       "}\n";
   return str;
 }
@@ -44,10 +39,11 @@ QString BasicWidget::vertexShaderString() const {
 QString BasicWidget::fragmentShaderString() const {
   QString str =
       "#version 330\n"
+      "in vec4 vertColor;\n"
       "out vec4 color;\n"
       "void main()\n"
       "{\n"
-      "  color = vec4(1.0f, 0.5f, 0.5f, 1.0f);\n"
+      "  color = vertColor;\n"
       "}\n";
   return str;
 }
@@ -145,7 +141,7 @@ void BasicWidget::initializeGL() {
   shaderProgram_.release();
 
   glViewport(0, 0, width(), height());
-  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 void BasicWidget::resizeGL(int w, int h) { glViewport(0, 0, w, h); }
@@ -169,17 +165,12 @@ void BasicWidget::paintGL() {
 }
 
 void BasicWidget::setWireframe() {
-  std::cout << wireframe << std::endl;
+  makeCurrent();
+  wireframe = !wireframe;
   if (wireframe) {
-    std::cout << "true" << std::endl;
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-    glViewport(0, 0, width(), height());
-    wireframe = false;
   } else {
-    std::cout << "false" << std::endl;
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-    glViewport(0, 0, width(), height());
-    wireframe = true;
   }
 }
 

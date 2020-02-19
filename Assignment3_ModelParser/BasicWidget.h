@@ -30,10 +30,9 @@ class BasicWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   void setWireframe();
   void load(std::string fileName);
 
-  std::string modelName;
   const std::string BUNNY = "bunny_centered.obj";
   const std::string MONKEY = "monkey_centered.obj";
-  bool wireframe = true;
+  bool wireframe = false;
 
   QOpenGLBuffer vbo_;
   QOpenGLBuffer ibo_;
