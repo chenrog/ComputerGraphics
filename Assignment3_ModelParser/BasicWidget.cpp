@@ -53,6 +53,7 @@ void BasicWidget::createShader() {
   vert.compileSourceCode(vertexShaderString());
   QOpenGLShader frag(QOpenGLShader::Fragment);
   frag.compileSourceCode(fragmentShaderString());
+
   bool ok = shaderProgram_.addShader(&vert);
   if (!ok) {
     qDebug() << shaderProgram_.log();
@@ -141,7 +142,6 @@ void BasicWidget::initializeGL() {
   shaderProgram_.release();
 
   glViewport(0, 0, width(), height());
-  glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
 void BasicWidget::resizeGL(int w, int h) { glViewport(0, 0, w, h); }
