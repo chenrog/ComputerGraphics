@@ -27,10 +27,17 @@ QString BasicWidget::vertexShaderString() const {
   QString str =
       "#version 330\n"
       "layout(location = 0) in vec3 position;\n"
+
+      "uniform mat4 modelMatrix;\n"
+      "uniform mat4 viewMatrix;\n"
+      "uniform mat4 projectionMatrix;\n"
+
       "out vec4 vertColor;\n"
+
       "void main()\n"
       "{\n"
-      "  gl_Position = vec4(position, 1.0);\n"
+      "  mat4 mvp = projectionMatrix * viewMatrix * modelMatrix;"
+      "  gl_Position = mvp * vec4(position, 1.0);\n"
       "  vertColor = vec4(1.0f, 0.4f, 0.4f, 1.0f);\n"
       "}\n";
   return str;
@@ -144,20 +151,37 @@ void BasicWidget::initializeGL() {
   glViewport(0, 0, width(), height());
 }
 
-void BasicWidget::resizeGL(int w, int h) { glViewport(0, 0, w, h); }
+void BasicWidget::resizeGL(int w, int h) {
+  glViewport(0, 0, w, h);
+
+  shaderProgram_.bind();
+
+  // reduce the size of the model to allow better viewing
+  QMatrix4x4 model_;
+  model_.setToIdentity();
+  model_.scale(0.75f, 0.75f, 0.75f);
+  shaderProgram_.setUniformValue("modelMatrix", model_);
+
+  QMatrix4x4 view_;
+  view_.setToIdentity();
+  shaderProgram_.setUniformValue("viewMatrix", view_);
+
+  QMatrix4x4 projection_;
+  projection_.setToIdentity();
+  shaderProgram_.setUniformValue("projectionMatrix", projection_);
+}
 
 void BasicWidget::paintGL() {
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_CULL_FACE);
 
-  glClearColor(0.f, 0.f, 0.f, 1.f);
+  glClearColor(0.05f, 0.05f, 0.05f, 1.f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
   shaderProgram_.bind();
   vao_.bind();
 
-  ObjParser* objParser = ObjParser::Instance();
-  int index_count = objParser->getIndices().size();
+  int index_count = ObjParser::Instance()->getIndices().size();
   glDrawElements(GL_TRIANGLES, index_count, GL_UNSIGNED_INT, 0);
 
   vao_.release();
