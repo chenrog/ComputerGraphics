@@ -14,7 +14,7 @@ out vec2 texCoords;
 void main()
 {
     // We have our transformed position set properly now
-    mat4 mvp = projectionMatrix * viewMatrix * modelMatrix
+    mat4 mvp = projectionMatrix * viewMatrix * modelMatrix;
     gl_Position = mvp * vec4(position, 1.0);
 
     // And we map our texture coordinates as appropriate

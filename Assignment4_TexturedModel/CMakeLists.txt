@@ -21,12 +21,14 @@ set(
   HEADERS
   include/App.h
   include/BasicWidget.h
+  include/Renderable.h
 )
 
 set(
   SOURCES
   src/App.cpp
   src/BasicWidget.cpp
+  src/Renderable.cpp
   main.cpp
 )
 
