@@ -1,14 +1,11 @@
 #version 330
 
-// Take in our texture coordinate from our vertex shader
-in vec2 texCoords;
-// We always define a fragment color that we output.
-out vec4 fragColor;
+in vec2 texCoords; // Take in our texture coordinate from our vertex shader
+out vec4 fragColor; // We always define a fragment color that we output.
 
-// TODO:  Add a sampler to retrieve our color data from!
-uniform sampler2D tex;
+uniform sampler2D tex; // sampler to retrieve our color data from
 
 void main() {
-  // Set our output fragment color to whatever we pull from our input texture (Note, change 'tex' to whatever the sampler is named)
+  // Set our output fragment color to whatever we pull from our input texture
   fragColor = texture(tex, texCoords);
 }
