@@ -35,8 +35,8 @@ set(
 )
 
 add_executable(App
-  ${SOURCES}
   ${HEADERS}
+  ${SOURCES}
 )
 
 target_link_libraries(App Qt5::Widgets Qt5::Core Qt5::Gui Qt5::OpenGL OpenGL::GL)
