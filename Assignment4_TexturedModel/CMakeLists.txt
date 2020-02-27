@@ -22,6 +22,7 @@ set(
   include/App.h
   include/BasicWidget.h
   include/Renderable.h
+  include/Rotation.h
 )
 
 set(
@@ -29,6 +30,7 @@ set(
   src/App.cpp
   src/BasicWidget.cpp
   src/Renderable.cpp
+  src/Rotation.cpp
   main.cpp
 )
 

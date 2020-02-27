@@ -9,10 +9,7 @@ Renderable::Renderable()
       texture_(QOpenGLTexture::Target2D),
       numTris_(0),
       vertexSize_(0),
-      rotationAxis_(0.0, 0.0, 1.0),
-      rotationSpeed_(0.25) {
-  rotationAngle_ = 0.0;
-}
+      rotation_(QVector3D(0.0, 0.0, 1.0), 0.25, 0.0) {}
 
 Renderable::~Renderable() {
   if (texture_.isCreated()) {
@@ -124,20 +121,12 @@ void Renderable::init(const QVector<QVector3D>& positions,
 }
 
 void Renderable::update(const qint64 msSinceLastFrame) {
-  // For this lab, we want our polygon to rotate.
-  float sec = msSinceLastFrame / 1000.0f;
-  float anglePart = sec * rotationSpeed_ * 360.f;
-  rotationAngle_ += anglePart;
-  while (rotationAngle_ >= 360.0) {
-    rotationAngle_ -= 360.0;
-  }
+  rotation_.update(msSinceLastFrame);
 }
 
 void Renderable::draw(const QMatrix4x4& view, const QMatrix4x4& projection) {
   // Create our model matrix.
-  QMatrix4x4 rotMatrix;
-  rotMatrix.setToIdentity();
-  rotMatrix.rotate(rotationAngle_, rotationAxis_);
+  QMatrix4x4 rotMatrix = rotation_.getMatrix();
 
   QMatrix4x4 modelMat = modelMatrix_ * rotMatrix;
   // Make sure our state is what we want
@@ -162,7 +151,7 @@ void Renderable::setModelMatrix(const QMatrix4x4& transform) {
 }
 
 void Renderable::setRotationAxis(const QVector3D& axis) {
-  rotationAxis_ = axis;
+  rotation_.setAxis(axis);
 }
 
-void Renderable::setRotationSpeed(float speed) { rotationSpeed_ = speed; }
+void Renderable::setRotationSpeed(float speed) { rotation_.setSpeed(speed); }

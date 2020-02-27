@@ -4,6 +4,8 @@
 #include <QtGui>
 #include <QtOpenGL>
 
+#include "Rotation.h"
+
 class Renderable {
  protected:
   QMatrix4x4 modelMatrix_;
@@ -15,9 +17,7 @@ class Renderable {
   unsigned int numTris_;
   int vertexSize_;
 
-  QVector3D rotationAxis_;
-  float rotationSpeed_;
-  float rotationAngle_;
+  Rotation rotation_;
 
   void createShaders();
 
