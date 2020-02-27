@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.8.0)
 
-PROJECT(App)
+PROJECT(Assignment)
 
 set(CMAKE_AUTOMOC ON)
 
@@ -14,17 +14,28 @@ include_directories(
   ${QtCore_INCLUDES}
   ${QtGui_INCLUDES}
   ${QtOpenGL_INCLUDES}
+  include/
 )
 
-set(srcs
+set(
+  HEADERS
+  include/App.h
+  include/BasicWidget.h
+)
+
+set(
+  SOURCES
+  src/App.cpp
+  src/BasicWidget.cpp
   main.cpp
 )
 
-add_executable(App
-  ${srcs}
+add_executable(Assignment
+  ${SOURCES}
+  ${HEADERS}
 )
 
-target_link_libraries(App Qt5::Widgets Qt5::Core Qt5::Gui Qt5::OpenGL OpenGL::GL)
+target_link_libraries(Assignment Qt5::Widgets Qt5::Core Qt5::Gui Qt5::OpenGL OpenGL::GL)
 
 if(WIN32)
 	add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
