@@ -22,8 +22,6 @@ void Rotation::setAxis(const QVector3D& axis) { axis_ = axis; }
 
 void Rotation::setSpeed(float speed) { speed_ = speed; }
 
-void Rotation::setAngle(float angle) { angle_ = angle; }
-
 QMatrix4x4 Rotation::getMatrix() {
   QMatrix4x4 matrix;
   matrix.setToIdentity();

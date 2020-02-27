@@ -18,8 +18,6 @@ class Rotation {
 
   void setSpeed(float speed);
 
-  void setAngle(float angle);
-
   QMatrix4x4 getMatrix();
 
  private:
