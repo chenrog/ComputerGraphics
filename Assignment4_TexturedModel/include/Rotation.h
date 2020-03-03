@@ -16,7 +16,7 @@ class Rotation {
 
   void setAxis(const QVector3D& axis);
 
-  void setSpeed(float speed);
+  void setSpeed(const float speed);
 
   QMatrix4x4 getMatrix();
 

@@ -154,4 +154,6 @@ void Renderable::setRotationAxis(const QVector3D& axis) {
   rotation_.setAxis(axis);
 }
 
-void Renderable::setRotationSpeed(float speed) { rotation_.setSpeed(speed); }
+void Renderable::setRotationSpeed(const float speed) {
+  rotation_.setSpeed(speed);
+}
