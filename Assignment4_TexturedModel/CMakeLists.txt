@@ -3,7 +3,6 @@ cmake_minimum_required(VERSION 3.8.0)
 PROJECT(App)
 
 set(CMAKE_AUTOMOC ON)
-
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 find_package(Qt5 COMPONENTS Widgets Core Gui OpenGL)
