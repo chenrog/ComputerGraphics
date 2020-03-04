@@ -14,12 +14,13 @@ include_directories(
   ${QtCore_INCLUDES}
   ${QtGui_INCLUDES}
   ${QtOpenGL_INCLUDES}
+  include/window
   include/
 )
 
 set(
   HEADERS
-  include/App.h
+  include/window/App.h
   include/BasicWidget.h
   include/Renderable.h
   include/Rotation.h
@@ -27,7 +28,7 @@ set(
 
 set(
   SOURCES
-  src/App.cpp
+  src/window/App.cpp
   src/BasicWidget.cpp
   src/Renderable.cpp
   src/Rotation.cpp
