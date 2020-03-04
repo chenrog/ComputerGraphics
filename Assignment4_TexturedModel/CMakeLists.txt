@@ -22,6 +22,7 @@ set(
   HEADERS
   include/window/App.h
   include/BasicWidget.h
+  include/ObjParser.h
   include/Renderable.h
   include/Rotation.h
   include/VertexData.h
@@ -31,6 +32,7 @@ set(
   SOURCES
   src/window/App.cpp
   src/BasicWidget.cpp
+  src/ObjParser.cpp
   src/Renderable.cpp
   src/Rotation.cpp
   main.cpp
