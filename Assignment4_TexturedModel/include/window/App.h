@@ -1,6 +1,4 @@
-/**
- * The primary application code.
- */
+#pragma once
 
 #include <QtCore>
 #include <QtGui>
