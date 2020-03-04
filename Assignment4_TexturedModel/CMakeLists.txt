@@ -24,6 +24,7 @@ set(
   include/BasicWidget.h
   include/Renderable.h
   include/Rotation.h
+  include/VertexData.h
 )
 
 set(
