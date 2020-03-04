@@ -4,9 +4,9 @@
 
 class Rotation {
  protected:
-  QVector3D axis_;
-  float speed_;
-  float angle_;
+  QVector3D axis;
+  float speed;
+  float angle;
 
  public:
   Rotation(const QVector3D& axis, float speed, float angle);
