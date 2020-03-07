@@ -126,7 +126,7 @@ void Renderable::update(const qint64 msSinceLastFrame) {
 
 void Renderable::draw(const QMatrix4x4& view, const QMatrix4x4& projection) {
   // Create our model matrix.
-  QMatrix4x4 rotMatrix = rotation.getMatrix();
+  QMatrix4x4 rotMatrix = rotation.toMatrix();
 
   QMatrix4x4 modelMat = modelMatrix * rotMatrix;
   // Make sure our state is what we want

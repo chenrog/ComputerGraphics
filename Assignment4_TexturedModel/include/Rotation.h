@@ -18,7 +18,7 @@ class Rotation {
 
   void setSpeed(const float speed);
 
-  QMatrix4x4 getMatrix();
+  QMatrix4x4 toMatrix();
 
  private:
 };
