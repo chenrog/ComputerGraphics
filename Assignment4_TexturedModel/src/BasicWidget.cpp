@@ -3,15 +3,15 @@
 //////////////////////////////////////////////////////////////////////
 // Publics
 BasicWidget::BasicWidget(QWidget* parent)
-    : QOpenGLWidget(parent), logger_(this) {
+    : QOpenGLWidget(parent), logger(this) {
   setFocusPolicy(Qt::StrongFocus);
 }
 
 BasicWidget::~BasicWidget() {
-  for (auto renderable : renderables_) {
+  for (auto renderable : renderables) {
     delete renderable;
   }
-  renderables_.clear();
+  renderables.clear();
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -73,7 +73,7 @@ void BasicWidget::initializeGL() {
   ren_position.translate(-1.0, 0.0, 0.0);
   ren->setModelMatrix(ren_position);
   ren->setRotationSpeed(0.2);
-  renderables_.push_back(ren);
+  renderables.push_back(ren);
 
   Renderable* ren2 = new Renderable();
   ren2->init(pos, norm, texCoord, idx, texFile);
@@ -82,44 +82,44 @@ void BasicWidget::initializeGL() {
   ren2->setModelMatrix(ren_position);
   ren2->setRotationAxis(QVector3D(0.0, 1.0, 0.0));
   ren2->setRotationSpeed(1.2);
-  renderables_.push_back(ren2);
+  renderables.push_back(ren2);
 
   glViewport(0, 0, width(), height());
-  frameTimer_.start();
+  frameTimer.start();
 }
 
 void BasicWidget::resizeGL(int w, int h) {
-  if (!logger_.isLogging()) {
-    logger_.initialize();
+  if (!logger.isLogging()) {
+    logger.initialize();
     // Setup the logger for real-time messaging
-    connect(&logger_, &QOpenGLDebugLogger::messageLogged, [=]() {
-      const QList<QOpenGLDebugMessage> messages = logger_.loggedMessages();
+    connect(&logger, &QOpenGLDebugLogger::messageLogged, [=]() {
+      const QList<QOpenGLDebugMessage> messages = logger.loggedMessages();
       for (auto msg : messages) {
         qDebug() << msg;
       }
     });
-    logger_.startLogging();
+    logger.startLogging();
   }
   glViewport(0, 0, w, h);
-  view_.setToIdentity();
-  view_.lookAt(QVector3D(0.0f, 0.0f, 2.0f), QVector3D(0.0f, 0.0f, 0.0f),
-               QVector3D(0.0f, 1.0f, 0.0f));
-  projection_.setToIdentity();
-  projection_.perspective(70.f, (float)w / (float)h, 0.001, 1000.0);
+  view.setToIdentity();
+  view.lookAt(QVector3D(0.0f, 0.0f, 2.0f), QVector3D(0.0f, 0.0f, 0.0f),
+              QVector3D(0.0f, 1.0f, 0.0f));
+  projection.setToIdentity();
+  projection.perspective(70.f, (float)w / (float)h, 0.001, 1000.0);
   glViewport(0, 0, w, h);
 }
 
 void BasicWidget::paintGL() {
-  qint64 msSinceRestart = frameTimer_.restart();
+  qint64 msSinceRestart = frameTimer.restart();
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_CULL_FACE);
 
   glClearColor(0.f, 0.f, 0.f, 1.f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  for (auto renderable : renderables_) {
+  for (auto renderable : renderables) {
     renderable->update(msSinceRestart);
-    renderable->draw(view_, projection_);
+    renderable->draw(view, projection);
   }
   update();
 }

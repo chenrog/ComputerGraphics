@@ -15,13 +15,13 @@ class BasicWidget : public QOpenGLWidget, protected QOpenGLFunctions {
 
  private:
   // camera, abstract maybe
-  QMatrix4x4 model_;
-  QMatrix4x4 view_;
-  QMatrix4x4 projection_;
+  QMatrix4x4 model;
+  QMatrix4x4 view;
+  QMatrix4x4 projection;
 
-  QElapsedTimer frameTimer_;
-  QVector<Renderable*> renderables_;
-  QOpenGLDebugLogger logger_;
+  QElapsedTimer frameTimer;
+  QVector<Renderable*> renderables;
+  QOpenGLDebugLogger logger;
 
  protected:
   // Required interaction overrides
