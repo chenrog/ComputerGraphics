@@ -8,16 +8,15 @@
 
 class Renderable {
  protected:
-  QMatrix4x4 modelMatrix_;
-  QOpenGLShaderProgram shader_;
-  QOpenGLTexture texture_;
-  QOpenGLBuffer vbo_;
-  QOpenGLBuffer ibo_;
-  QOpenGLVertexArrayObject vao_;
-  unsigned int numTris_;
-  int vertexSize_;
-
-  Rotation rotation_;
+  QMatrix4x4 modelMatrix;
+  QOpenGLShaderProgram shader;
+  QOpenGLTexture texture;
+  QOpenGLBuffer vbo;
+  QOpenGLBuffer ibo;
+  QOpenGLVertexArrayObject vao;
+  unsigned int numTris;
+  int vertexSize;
+  Rotation rotation;
 
   void createShaders();
 

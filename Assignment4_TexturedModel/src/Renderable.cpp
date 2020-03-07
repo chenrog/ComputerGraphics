@@ -4,44 +4,44 @@
 #include <QtOpenGL>
 
 Renderable::Renderable()
-    : vbo_(QOpenGLBuffer::VertexBuffer),
-      ibo_(QOpenGLBuffer::IndexBuffer),
-      texture_(QOpenGLTexture::Target2D),
-      numTris_(0),
-      vertexSize_(0),
-      rotation_(QVector3D(0.0, 0.0, 1.0), 0.25, 0.0) {}
+    : vbo(QOpenGLBuffer::VertexBuffer),
+      ibo(QOpenGLBuffer::IndexBuffer),
+      texture(QOpenGLTexture::Target2D),
+      numTris(0),
+      vertexSize(0),
+      rotation(QVector3D(0.0, 0.0, 1.0), 0.25, 0.0) {}
 
 Renderable::~Renderable() {
-  if (texture_.isCreated()) {
-    texture_.destroy();
+  if (texture.isCreated()) {
+    texture.destroy();
   }
-  if (vbo_.isCreated()) {
-    vbo_.destroy();
+  if (vbo.isCreated()) {
+    vbo.destroy();
   }
-  if (ibo_.isCreated()) {
-    ibo_.destroy();
+  if (ibo.isCreated()) {
+    ibo.destroy();
   }
-  if (vao_.isCreated()) {
-    vao_.destroy();
+  if (vao.isCreated()) {
+    vao.destroy();
   }
 }
 
 void Renderable::createShaders() {
   QString vertexFilename = "./shaders/vert.glsl";
   bool ok =
-      shader_.addShaderFromSourceFile(QOpenGLShader::Vertex, vertexFilename);
+      shader.addShaderFromSourceFile(QOpenGLShader::Vertex, vertexFilename);
   if (!ok) {
-    qDebug() << shader_.log();
+    qDebug() << shader.log();
   }
   QString fragmentFilename = "./shaders/frag.glsl";
-  ok = shader_.addShaderFromSourceFile(QOpenGLShader::Fragment,
-                                       fragmentFilename);
+  ok =
+      shader.addShaderFromSourceFile(QOpenGLShader::Fragment, fragmentFilename);
   if (!ok) {
-    qDebug() << shader_.log();
+    qDebug() << shader.log();
   }
-  ok = shader_.link();
+  ok = shader.link();
   if (!ok) {
-    qDebug() << shader_.log();
+    qDebug() << shader.log();
   }
 }
 
@@ -61,99 +61,99 @@ void Renderable::init(const QVector<QVector3D>& positions,
   }
 
   // Set our model matrix to identity
-  modelMatrix_.setToIdentity();
+  modelMatrix.setToIdentity();
   // Load our texture.
-  texture_.setData(QImage(textureFile));
+  texture.setData(QImage(textureFile));
 
   // set our number of trianges.
-  numTris_ = indexes.size() / 3;
+  numTris = indexes.size() / 3;
 
   // num verts (used to size our vbo)
   int numVerts = positions.size();
-  vertexSize_ = 3 + 2;  // Position + texCoord
-  int numVBOEntries = numVerts * vertexSize_;
+  vertexSize = 3 + 2;  // Position + texCoord
+  int numVBOEntries = numVerts * vertexSize;
 
   // Setup our shader.
   createShaders();
 
   // Now we can set up our buffers.
   // The VBO is created -- now we must create our VAO
-  vao_.create();
-  vao_.bind();
-  vbo_.create();
-  vbo_.setUsagePattern(QOpenGLBuffer::StaticDraw);
-  vbo_.bind();
+  vao.create();
+  vao.bind();
+  vbo.create();
+  vbo.setUsagePattern(QOpenGLBuffer::StaticDraw);
+  vbo.bind();
   // Create a temporary data array
   float* data = new float[numVBOEntries];
   for (int i = 0; i < numVerts; ++i) {
-    data[i * vertexSize_ + 0] = positions.at(i).x();
-    data[i * vertexSize_ + 1] = positions.at(i).y();
-    data[i * vertexSize_ + 2] = positions.at(i).z();
-    data[i * vertexSize_ + 3] = texCoords.at(i).x();
-    data[i * vertexSize_ + 4] = texCoords.at(i).y();
+    data[i * vertexSize + 0] = positions.at(i).x();
+    data[i * vertexSize + 1] = positions.at(i).y();
+    data[i * vertexSize + 2] = positions.at(i).z();
+    data[i * vertexSize + 3] = texCoords.at(i).x();
+    data[i * vertexSize + 4] = texCoords.at(i).y();
   }
-  vbo_.allocate(data, numVBOEntries * sizeof(float));
+  vbo.allocate(data, numVBOEntries * sizeof(float));
   delete[] data;
 
   // Create our index buffer
-  ibo_.create();
-  ibo_.bind();
-  ibo_.setUsagePattern(QOpenGLBuffer::StaticDraw);
+  ibo.create();
+  ibo.bind();
+  ibo.setUsagePattern(QOpenGLBuffer::StaticDraw);
   // create a temporary array for our indexes
   unsigned int* idxAr = new unsigned int[indexes.size()];
   for (int i = 0; i < indexes.size(); ++i) {
     idxAr[i] = indexes.at(i);
   }
-  ibo_.allocate(idxAr, indexes.size() * sizeof(unsigned int));
+  ibo.allocate(idxAr, indexes.size() * sizeof(unsigned int));
   delete[] idxAr;
 
   // Make sure we setup our shader inputs properly
-  shader_.enableAttributeArray(0);
-  shader_.setAttributeBuffer(0, GL_FLOAT, 0, 3, vertexSize_ * sizeof(float));
-  shader_.enableAttributeArray(1);
-  shader_.setAttributeBuffer(1, GL_FLOAT, 3 * sizeof(float), 2,
-                             vertexSize_ * sizeof(float));
+  shader.enableAttributeArray(0);
+  shader.setAttributeBuffer(0, GL_FLOAT, 0, 3, vertexSize * sizeof(float));
+  shader.enableAttributeArray(1);
+  shader.setAttributeBuffer(1, GL_FLOAT, 3 * sizeof(float), 2,
+                            vertexSize * sizeof(float));
 
   // Release our vao and THEN release our buffers.
-  vao_.release();
-  vbo_.release();
-  ibo_.release();
+  vao.release();
+  vbo.release();
+  ibo.release();
 }
 
 void Renderable::update(const qint64 msSinceLastFrame) {
-  rotation_.update(msSinceLastFrame);
+  rotation.update(msSinceLastFrame);
 }
 
 void Renderable::draw(const QMatrix4x4& view, const QMatrix4x4& projection) {
   // Create our model matrix.
-  QMatrix4x4 rotMatrix = rotation_.getMatrix();
+  QMatrix4x4 rotMatrix = rotation.getMatrix();
 
-  QMatrix4x4 modelMat = modelMatrix_ * rotMatrix;
+  QMatrix4x4 modelMat = modelMatrix * rotMatrix;
   // Make sure our state is what we want
-  shader_.bind();
+  shader.bind();
   // Set our matrix uniforms!
   QMatrix4x4 id;
   id.setToIdentity();
-  shader_.setUniformValue("modelMatrix", modelMat);
-  shader_.setUniformValue("viewMatrix", view);
-  shader_.setUniformValue("projectionMatrix", projection);
+  shader.setUniformValue("modelMatrix", modelMat);
+  shader.setUniformValue("viewMatrix", view);
+  shader.setUniformValue("projectionMatrix", projection);
 
-  vao_.bind();
-  texture_.bind();
+  vao.bind();
+  texture.bind();
   glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-  texture_.release();
-  vao_.release();
-  shader_.release();
+  texture.release();
+  vao.release();
+  shader.release();
 }
 
 void Renderable::setModelMatrix(const QMatrix4x4& transform) {
-  modelMatrix_ = transform;
+  modelMatrix = transform;
 }
 
 void Renderable::setRotationAxis(const QVector3D& axis) {
-  rotation_.setAxis(axis);
+  rotation.setAxis(axis);
 }
 
 void Renderable::setRotationSpeed(const float speed) {
-  rotation_.setSpeed(speed);
+  rotation.setSpeed(speed);
 }
