@@ -21,13 +21,14 @@ class ObjParser {
   void pushVertexTextures(QStringList data);
   void pushVertexNormals(QStringList data);
   void pushVertices(QStringList data);
+  void getTextureFile(QString mtlFilePath);
 
  protected:
   QVector<VertexData> vertices;
   QVector<QVector3D> vertexPositions;
   QVector<QVector2D> vertexTextures;
   QVector<float> vertexNormals;
-  QVector<uint> indices;
+  QString textureFile;
 
  public:
   static ObjParser* Instance();

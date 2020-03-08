@@ -23,7 +23,7 @@ void ObjParser::clear() {
   vertexTextures.clear();
   vertexNormals.clear();
   vertices.clear();
-  indices.clear();
+  textureFile = "";
 }
 
 void ObjParser::pushVertexPositions(QStringList data) {
@@ -67,6 +67,22 @@ void ObjParser::pushVertices(QStringList data) {
   }
 }
 
+void ObjParser::getTextureFile(QString mtlFilePath) {
+  std::ifstream mtlFile;
+  mtlFile.open(mtlFilePath.toStdString());
+
+  std::string line;
+  while (getline(mtlFile, line)) {
+    QString qline = QString::fromStdString(line);
+    QStringList data = qline.split(' ', QString::SkipEmptyParts);
+    QString type = data.takeFirst();  // this also removes type
+
+    if (type == "map_Kd") {
+      textureFile = data[0];
+    }
+  }
+}
+
 void ObjParser::parse(QString filePath) {
   std::ifstream file;
   file.open(filePath.toStdString());
@@ -77,23 +93,27 @@ void ObjParser::parse(QString filePath) {
   while (getline(file, line)) {
     QString qline = QString::fromStdString(line);
     QStringList data = qline.split(' ', QString::SkipEmptyParts);
-    data.takeFirst();  // removes the type from array so only numbers
+    QString type = data.takeFirst();  // this also removes type
 
     // vertex normal
-    if (line[0] == 'v' && line[1] == 'n') {
+    if (type == "vn") {
       pushVertexNormals(data);
     }
     // vertex texure, we ignore this for now but would mess with vertex
-    else if (line[0] == 'v' && line[1] == 't') {
+    else if (type == "vt") {
       pushVertexTextures(data);
     }
     // vertex positions
-    else if (line[0] == 'v') {
+    else if (type == "v") {
       pushVertexPositions(data);
     }
     // face / VertexData
-    else if (line[0] == 'f') {
+    else if (type == "f") {
       pushVertices(data);
+    }
+    // find path to mtl
+    else if (type == "mtllib") {
+      getTextureFile(data[0]);
     }
     // invalid
     else {
