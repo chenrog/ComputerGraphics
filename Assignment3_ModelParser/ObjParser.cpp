@@ -18,13 +18,45 @@ ObjParser* ObjParser::Instance() {
   return OP_Instance;
 }
 
-void ObjParser::parse(std::string fileName) {
-  std::ifstream file;
-  file.open("./objects/" + fileName);
-
-  vertex_normals.clear();
+void ObjParser::clear() {
+  vertexNormals.clear();
+  vertexTextures.clear();
   vertices.clear();
   indices.clear();
+}
+
+void ObjParser::pushVertices(QStringList data) {
+  for (int i = 0; i < data.size(); i++) {
+    vertices.push_back(data[i].toFloat());
+  }
+}
+
+void ObjParser::pushVertexNormals(QStringList data) {
+  for (int i = 0; i < data.size(); i++) {
+    vertexNormals.push_back(data[i].toFloat());
+  }
+}
+
+void ObjParser::pushVertexTextures(QStringList data) {
+  for (int i = 0; i < data.size(); i++) {
+    vertexTextures.push_back(data[i].toFloat());
+  }
+}
+
+void ObjParser::pushIndices(QStringList data) {
+  for (int i = 0; i < data.size(); i++) {
+    QStringList tuple = data[i].split("//");
+    uint vertex = tuple[0].toUInt() - 1;
+    uint vertexNormal = tuple[1].toUInt() - 1;
+    indices.push_back(vertex);
+  }
+}
+
+void ObjParser::parse(QString filePath) {
+  std::ifstream file;
+  file.open(filePath.toStdString());
+
+  this->clear();
 
   std::string line;
   while (getline(file, line)) {
@@ -34,28 +66,19 @@ void ObjParser::parse(std::string fileName) {
 
     // vertex normal
     if (line[0] == 'v' && line[1] == 'n') {
-      for (int i = 0; i < data.size(); i++) {
-        vertex_normals.push_back(data[i].toFloat());
-      }
+      pushVertexNormals(data);
     }
     // vertex texure, we ignore this for now but would mess with vertex
     else if (line[0] == 'v' && line[1] == 't') {
-      continue;
+      pushVertexTextures(data);
     }
     // vertex
     else if (line[0] == 'v') {
-      for (int i = 0; i < data.size(); i++) {
-        vertices.push_back(data[i].toFloat());
-      }
+      pushVertices(data);
     }
     // face
     else if (line[0] == 'f') {
-      for (int i = 0; i < data.size(); i++) {
-        QStringList tuple = data[i].split("//");
-        uint vertex = tuple[0].toUInt() - 1;
-        uint vertexNormal = tuple[1].toUInt() - 1;
-        indices.push_back(vertex);
-      }
+      pushIndices(data);
     }
     // nothing valid
     else {
@@ -68,6 +91,6 @@ void ObjParser::parse(std::string fileName) {
 
 QVector<float> ObjParser::getVertices() { return vertices; }
 
-QVector<float> ObjParser::getVertexNormals() { return vertex_normals; }
+QVector<float> ObjParser::getVertexNormals() { return vertexNormals; }
 
 QVector<uint> ObjParser::getIndices() { return indices; }

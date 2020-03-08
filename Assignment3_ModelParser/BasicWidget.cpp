@@ -200,7 +200,7 @@ void BasicWidget::setWireframe() {
 
 void BasicWidget::load(std::string fileName) {
   ObjParser* objParser = ObjParser::Instance();
-  objParser->parse(fileName);
+  objParser->parse(QString::fromStdString(fileName));
 
   shaderProgram_.bind();
   vbo_.bind();
