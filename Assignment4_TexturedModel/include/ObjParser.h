@@ -21,7 +21,7 @@ class ObjParser {
  public:
   static ObjParser* Instance();
 
-  void parse(std::string fileName);
+  void parse(QString filePath);
   QVector<float> getVertices();
   QVector<float> getVertexNormals();
   QVector<uint> getIndices();

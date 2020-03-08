@@ -17,8 +17,8 @@ void App::buildGui() {
   QAction* exit = file->addAction("Quit", [this]() { close(); });
 }
 
-void App::selectObject(QString filepath) {
-  std::cout << filepath.toStdString() << std::endl;
+void App::selectObject(QString filePath) {
+  std::cout << filePath.toStdString() << std::endl;
 }
 
 void App::populateObjectSelectMenu(QMenu* objectMenu) {
@@ -28,6 +28,7 @@ void App::populateObjectSelectMenu(QMenu* objectMenu) {
   QMap<QString, QString> objects;
   while (objectsDirIterator.hasNext()) {
     objectsDirIterator.next();
+    // ex. "bunny.obj" -> "bunny"
     QString fileName = objectsDirIterator.fileName().split('.')[0];
     QString filePath = objectsDirIterator.filePath();
     objects[fileName] = filePath;

@@ -18,7 +18,7 @@ class App : public QMainWindow {
  signals:
 
  private slots:
-  void selectObject(QString filepath);
+  void selectObject(QString filePath);
 
  private:
   BasicWidget* widget;

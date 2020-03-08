@@ -18,9 +18,9 @@ ObjParser* ObjParser::Instance() {
   return OP_Instance;
 }
 
-void ObjParser::parse(std::string fileName) {
+void ObjParser::parse(QString filePath) {
   std::ifstream file;
-  file.open("./objects/" + fileName);
+  file.open(filePath.toStdString());
 
   vertex_normals.clear();
   vertices.clear();
