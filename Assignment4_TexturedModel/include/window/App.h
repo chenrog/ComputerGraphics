@@ -3,6 +3,10 @@
 #include <QtCore>
 #include <QtGui>
 #include <QtWidgets>
+#include <iostream>
+#include <string>
+
+#include "BasicWidget.h"
 
 class App : public QMainWindow {
   Q_OBJECT
@@ -13,8 +17,12 @@ class App : public QMainWindow {
 
  signals:
 
- public slots:
+ private slots:
+  void selectObject(QString filepath);
 
  private:
+  BasicWidget* widget;
+
   void buildGui();
+  void populateObjectSelectMenu(QMenu* objectMenu);
 };

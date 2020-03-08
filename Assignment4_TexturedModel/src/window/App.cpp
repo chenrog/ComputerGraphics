@@ -1,18 +1,41 @@
 #include "App.h"
 
-#include "BasicWidget.h"
-
 App::App(QWidget* parent) : QMainWindow(parent) { buildGui(); }
 
 App::~App(){};
 
 void App::buildGui() {
+  // Our basic widget.
+  this->widget = new BasicWidget(this);
+  setCentralWidget(widget);
+
   // A simple menubar.
   QMenuBar* menu = menuBar();
   QMenu* file = menu->addMenu("File");
+  QMenu* objectsMenu = file->addMenu("Objects");
+  populateObjectSelectMenu(objectsMenu);
   QAction* exit = file->addAction("Quit", [this]() { close(); });
+}
 
-  // Our basic widget.
-  BasicWidget* widget = new BasicWidget(this);
-  setCentralWidget(widget);
+void App::selectObject(QString filepath) {
+  std::cout << filepath.toStdString() << std::endl;
+}
+
+void App::populateObjectSelectMenu(QMenu* objectMenu) {
+  QDirIterator objectsDirIterator("objects", QStringList() << "*.obj",
+                                  QDir::NoFilter, QDirIterator::Subdirectories);
+
+  QMap<QString, QString> objects;
+  while (objectsDirIterator.hasNext()) {
+    objectsDirIterator.next();
+    QString fileName = objectsDirIterator.fileName().split('.')[0];
+    QString filePath = objectsDirIterator.filePath();
+    objects[fileName] = filePath;
+  }
+
+  foreach (QString fileName, objects.keys()) {
+    QString filePath = objects[fileName];
+    auto select = [this, filePath]() { selectObject(filePath); };
+    objectMenu->addAction(fileName, select);
+  }
 }
