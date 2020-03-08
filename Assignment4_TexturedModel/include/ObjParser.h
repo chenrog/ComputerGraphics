@@ -3,9 +3,12 @@
 #include <QString>
 #include <QStringList>
 #include <QVector>
+#include <QtGui>
 #include <fstream>
 #include <iostream>
 #include <string>
+
+#include "VertexData.h"
 
 class ObjParser {
  private:
@@ -14,23 +17,21 @@ class ObjParser {
   virtual ~ObjParser();
 
   void clear();
-  void pushVertices(QStringList data);
-  void pushVertexNormals(QStringList data);
+  void pushVertexPositions(QStringList data);
   void pushVertexTextures(QStringList data);
-  void pushIndices(QStringList data);
+  void pushVertexNormals(QStringList data);
+  void pushVertices(QStringList data);
 
  protected:
-  QVector<float> vertices;
+  QVector<VertexData> vertices;
+  QVector<QVector3D> vertexPositions;
+  QVector<QVector2D> vertexTextures;
   QVector<float> vertexNormals;
-  QVector<float> vertexTextures;
   QVector<uint> indices;
 
  public:
   static ObjParser* Instance();
 
   void parse(QString filePath);
-  QVector<float> getVertices();
-  QVector<float> getVertexNormals();
-  QVector<float> getVertexTextures();
-  QVector<uint> getIndices();
+  QVector<VertexData> getVertices();
 };

@@ -19,36 +19,51 @@ ObjParser* ObjParser::Instance() {
 }
 
 void ObjParser::clear() {
-  vertexNormals.clear();
+  vertexPositions.clear();
   vertexTextures.clear();
+  vertexNormals.clear();
   vertices.clear();
   indices.clear();
 }
 
-void ObjParser::pushVertices(QStringList data) {
-  for (int i = 0; i < data.size(); i++) {
-    vertices.push_back(data[i].toFloat());
-  }
-}
-
-void ObjParser::pushVertexNormals(QStringList data) {
-  for (int i = 0; i < data.size(); i++) {
-    vertexNormals.push_back(data[i].toFloat());
+void ObjParser::pushVertexPositions(QStringList data) {
+  for (int i = 0; i < data.size(); i += 3) {
+    float x = data[i].toFloat();
+    float y = data[i + 1].toFloat();
+    float z = data[i + 2].toFloat();
+    QVector3D position = QVector3D(x, y, z);
+    vertexPositions.push_back(position);
   }
 }
 
 void ObjParser::pushVertexTextures(QStringList data) {
-  for (int i = 0; i < data.size(); i++) {
-    vertexTextures.push_back(data[i].toFloat());
+  for (int i = 0; i < data.size() / 2; i += 2) {
+    float s = data[i].toFloat();
+    float t = data[i + 1].toFloat();
+    QVector2D texture = QVector2D(s, t);
+    vertexTextures.push_back(texture);
   }
 }
 
-void ObjParser::pushIndices(QStringList data) {
+void ObjParser::pushVertexNormals(QStringList data) {
+  // stubbed for now
+}
+
+void ObjParser::pushVertices(QStringList data) {
   for (int i = 0; i < data.size(); i++) {
-    QStringList tuple = data[i].split("//");
-    uint vertex = tuple[0].toUInt() - 1;
-    uint vertexNormal = tuple[1].toUInt() - 1;
-    indices.push_back(vertex);
+    QStringList tuple = data[i].split("/");
+    // get indices
+    uint positionIdx = tuple[0].toUInt() - 1;
+    uint textureIdx = tuple[1].toUInt() - 1;
+    // uint vertexNormal = tuple[2].toUInt() - 1;
+    // create VertexData
+    QVector3D position = vertexPositions[positionIdx];
+    QVector2D texture = vertexTextures[textureIdx];
+    VertexData vertex = VertexData(position, texture);
+    // add to vertices if not already included
+    if (!vertices.contains(vertex)) {
+      vertices.push_back(vertex);
+    }
   }
 }
 
@@ -72,15 +87,15 @@ void ObjParser::parse(QString filePath) {
     else if (line[0] == 'v' && line[1] == 't') {
       pushVertexTextures(data);
     }
-    // vertex
+    // vertex positions
     else if (line[0] == 'v') {
+      pushVertexPositions(data);
+    }
+    // face / VertexData
+    else if (line[0] == 'f') {
       pushVertices(data);
     }
-    // face
-    else if (line[0] == 'f') {
-      pushIndices(data);
-    }
-    // nothing valid
+    // invalid
     else {
       continue;
     }
@@ -89,10 +104,4 @@ void ObjParser::parse(QString filePath) {
   file.close();
 }
 
-QVector<float> ObjParser::getVertices() { return vertices; }
-
-QVector<float> ObjParser::getVertexNormals() { return vertexNormals; }
-
-QVector<float> ObjParser::getVertexTextures() { return vertexTextures; }
-
-QVector<uint> ObjParser::getIndices() { return indices; }
+QVector<VertexData> ObjParser::getVertices() { return vertices; }

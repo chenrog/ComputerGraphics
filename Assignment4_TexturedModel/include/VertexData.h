@@ -29,3 +29,11 @@ struct VertexData {
 
   QVector3D texture() { return QVector2D(s, t); }
 };
+
+inline bool operator==(const VertexData &a, const VertexData &b) {
+  return (a.x == b.x) &&
+         (a.y == b.y) &&
+         (a.z == b.z) &&
+         (a.s == b.s) &&
+         (a.t == b.t);
+}
