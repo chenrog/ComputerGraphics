@@ -28,11 +28,12 @@ class ObjParser {
   QVector<QVector3D> vertexPositions;
   QVector<QVector2D> vertexTextures;
   QVector<float> vertexNormals;
-  QString textureFile;
+  QString textureFilePath;
 
  public:
   static ObjParser* Instance();
 
   void parse(QString filePath);
   QVector<VertexData> getVertices();
+  QString getTextureFilePath();
 };

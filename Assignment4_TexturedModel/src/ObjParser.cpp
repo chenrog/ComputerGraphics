@@ -23,7 +23,7 @@ void ObjParser::clear() {
   vertexTextures.clear();
   vertexNormals.clear();
   vertices.clear();
-  textureFile = "";
+  textureFilePath = "";
 }
 
 void ObjParser::pushVertexPositions(QStringList data) {
@@ -78,7 +78,7 @@ void ObjParser::getTextureFile(QString mtlFilePath) {
     QString type = data.takeFirst();  // this also removes type
 
     if (type == "map_Kd") {
-      textureFile = data[0];
+      textureFilePath = data[0];
     }
   }
 }
@@ -125,3 +125,4 @@ void ObjParser::parse(QString filePath) {
 }
 
 QVector<VertexData> ObjParser::getVertices() { return vertices; }
+QString ObjParser::getTextureFilePath() { return textureFilePath; }
