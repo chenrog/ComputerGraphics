@@ -26,6 +26,13 @@ void ObjParser::clear() {
   textureFilePath = "";
 }
 
+QString ObjParser::constructFilePath(QString filePath, QString newFileName) {
+  QStringList directory = filePath.split('/', QString::SkipEmptyParts);
+  directory.removeLast();  // get rid of old filename
+  directory.append(newFileName);
+  return directory.join("/");
+}
+
 void ObjParser::pushVertexPositions(QStringList data) {
   for (int i = 0; i < data.size(); i += 3) {
     float x = data[i].toFloat();
@@ -67,20 +74,26 @@ void ObjParser::pushVertices(QStringList data) {
   }
 }
 
-void ObjParser::getTextureFile(QString mtlFilePath) {
-  std::ifstream mtlFile;
-  mtlFile.open(mtlFilePath.toStdString());
+void ObjParser::getTextureFile(QString filePath) {
+  std::ifstream file;
+  file.open(filePath.toStdString());
 
   std::string line;
-  while (getline(mtlFile, line)) {
+  while (getline(file, line)) {
+    if (line.empty()) {
+      continue;
+    }
+
     QString qline = QString::fromStdString(line);
     QStringList data = qline.split(' ', QString::SkipEmptyParts);
     QString type = data.takeFirst();  // this also removes type
 
     if (type == "map_Kd") {
-      textureFilePath = data[0];
+      textureFilePath = constructFilePath(filePath, data[0]);
     }
   }
+
+  file.close();
 }
 
 void ObjParser::parse(QString filePath) {
@@ -88,9 +101,14 @@ void ObjParser::parse(QString filePath) {
   file.open(filePath.toStdString());
 
   clear();
+  QString mtlFilePath;
 
   std::string line;
   while (getline(file, line)) {
+    if (line.empty()) {
+      continue;
+    }
+
     QString qline = QString::fromStdString(line);
     QStringList data = qline.split(' ', QString::SkipEmptyParts);
     QString type = data.takeFirst();  // this also removes type
@@ -113,7 +131,7 @@ void ObjParser::parse(QString filePath) {
     }
     // find path to mtl
     else if (type == "mtllib") {
-      getTextureFile(data[0]);
+      mtlFilePath = constructFilePath(filePath, data[0]);
     }
     // invalid
     else {
@@ -122,6 +140,10 @@ void ObjParser::parse(QString filePath) {
   }
 
   file.close();
+
+  if (!mtlFilePath.isEmpty()) {
+    getTextureFile(mtlFilePath);
+  }
 }
 
 QVector<VertexData> ObjParser::getVertices() { return vertices; }

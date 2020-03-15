@@ -17,6 +17,7 @@ class ObjParser {
   virtual ~ObjParser();
 
   void clear();
+  QString constructFilePath(QString filePath, QString newFileName);
   void pushVertexPositions(QStringList data);
   void pushVertexTextures(QStringList data);
   void pushVertexNormals(QStringList data);
