@@ -29,11 +29,25 @@ void BasicWidget::keyReleaseEvent(QKeyEvent* keyEvent) {
   } else if (key == Qt::Key_Right) {
     qDebug() << "Right Arrow Pressed";
     update();
+  } else if (key == Qt::Key_W) {
+    qDebug() << "Wireframe On/Off";
+    setWireframe();
+    update();
   } else if (key == Qt::Key_Q) {
     qDebug() << "Quit";
     std::exit(0);
   } else {
     qDebug() << "You Pressed an unsupported Key!";
+  }
+}
+
+void BasicWidget::setWireframe() {
+  makeCurrent();
+  wireframe = !wireframe;
+  if (wireframe) {
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+  } else {
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   }
 }
 
@@ -111,7 +125,7 @@ void BasicWidget::resizeGL(int w, int h) {
 
 void BasicWidget::paintGL() {
   qint64 msSinceRestart = frameTimer.restart();
-  glDisable(GL_DEPTH_TEST);
+  glEnable(GL_DEPTH_TEST);
   glDisable(GL_CULL_FACE);
 
   glClearColor(0.f, 0.f, 0.f, 1.f);
@@ -122,4 +136,29 @@ void BasicWidget::paintGL() {
     renderable->draw(view, projection);
   }
   update();
+}
+
+void BasicWidget::load(QString filePath) {
+  for (auto renderable : renderables) {
+    delete renderable;
+  }
+  renderables.clear();
+
+  ObjParser* objParser = ObjParser::Instance();
+  objParser->parse(filePath);
+
+  auto verts = objParser->getVertices();
+  auto idxs = objParser->getIndices();
+  auto texFile = objParser->getTextureFilePath();
+  Renderable* ren = new Renderable();
+
+  ren->init(verts, idxs, texFile);
+  QMatrix4x4 ren_position;
+  ren_position.setToIdentity();
+  ren_position.translate(0.0, 0.0, -2.0);
+  ren->setModelMatrix(ren_position);
+  ren->setRotationAxis(QVector3D(0.0, 1.0, 0.0));
+  ren->setRotationSpeed(0.2);
+
+  renderables.push_back(ren);
 }

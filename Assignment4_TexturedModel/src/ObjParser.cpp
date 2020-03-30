@@ -23,6 +23,7 @@ void ObjParser::clear() {
   vertexTextures.clear();
   vertexNormals.clear();
   vertices.clear();
+  indices.clear();
   textureFilePath = "";
 }
 
@@ -46,7 +47,7 @@ void ObjParser::pushVertexPositions(QStringList data) {
 void ObjParser::pushVertexTextures(QStringList data) {
   for (int i = 0; i < data.size() / 2; i += 2) {
     float s = data[i].toFloat();
-    float t = data[i + 1].toFloat();
+    float t = (data[i + 1].toFloat()) * -1;  // flip to rightside up
     QVector2D texture = QVector2D(s, t);
     vertexTextures.push_back(texture);
   }
@@ -56,7 +57,7 @@ void ObjParser::pushVertexNormals(QStringList data) {
   // stubbed for now
 }
 
-void ObjParser::pushVertices(QStringList data) {
+void ObjParser::pushVerticesAndIndices(QStringList data) {
   for (int i = 0; i < data.size(); i++) {
     QStringList tuple = data[i].split("/");
     // get indices
@@ -71,6 +72,8 @@ void ObjParser::pushVertices(QStringList data) {
     if (!vertices.contains(vertex)) {
       vertices.push_back(vertex);
     }
+
+    indices.push_back(vertices.indexOf(vertex));
   }
 }
 
@@ -127,7 +130,7 @@ void ObjParser::parse(QString filePath) {
     }
     // face / VertexData
     else if (type == "f") {
-      pushVertices(data);
+      pushVerticesAndIndices(data);
     }
     // find path to mtl
     else if (type == "mtllib") {
@@ -147,4 +150,5 @@ void ObjParser::parse(QString filePath) {
 }
 
 QVector<VertexData> ObjParser::getVertices() { return vertices; }
+QVector<uint> ObjParser::getIndices() { return indices; }
 QString ObjParser::getTextureFilePath() { return textureFilePath; }

@@ -17,9 +17,7 @@ void App::buildGui() {
   QAction* exit = file->addAction("Quit", [this]() { close(); });
 }
 
-void App::selectObject(QString filePath) {
-  std::cout << filePath.toStdString() << std::endl;
-}
+void App::selectObject(QString filePath) { widget->load(filePath); }
 
 void App::populateObjectSelectMenu(QMenu* objectMenu) {
   QDirIterator objectsDirIterator("objects", QStringList() << "*.obj",

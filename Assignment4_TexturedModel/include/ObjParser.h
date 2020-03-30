@@ -21,7 +21,7 @@ class ObjParser {
   void pushVertexPositions(QStringList data);
   void pushVertexTextures(QStringList data);
   void pushVertexNormals(QStringList data);
-  void pushVertices(QStringList data);
+  void pushVerticesAndIndices(QStringList data);
   void getTextureFile(QString mtlFilePath);
 
  protected:
@@ -29,6 +29,7 @@ class ObjParser {
   QVector<QVector3D> vertexPositions;
   QVector<QVector2D> vertexTextures;
   QVector<float> vertexNormals;
+  QVector<uint> indices;
   QString textureFilePath;
 
  public:
@@ -36,5 +37,6 @@ class ObjParser {
 
   void parse(QString filePath);
   QVector<VertexData> getVertices();
+  QVector<uint> getIndices();
   QString getTextureFilePath();
 };

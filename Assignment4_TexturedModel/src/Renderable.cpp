@@ -7,7 +7,7 @@ Renderable::Renderable()
     : vbo(QOpenGLBuffer::VertexBuffer),
       ibo(QOpenGLBuffer::IndexBuffer),
       texture(QOpenGLTexture::Target2D),
-      numTris(0),
+      elementCount(0),
       vertexSize(0),
       rotation(QVector3D(0.0, 0.0, 1.0), 0.25, 0.0) {}
 
@@ -66,7 +66,7 @@ void Renderable::init(const QVector<QVector3D>& positions,
   texture.setData(QImage(textureFile));
 
   // set our number of trianges.
-  numTris = indexes.size() / 3;
+  elementCount = indexes.size();
 
   // num verts (used to size our vbo)
   int numVerts = positions.size();
@@ -92,6 +92,7 @@ void Renderable::init(const QVector<QVector3D>& positions,
     data[i * vertexSize + 3] = texCoords.at(i).x();
     data[i * vertexSize + 4] = texCoords.at(i).y();
   }
+
   vbo.allocate(data, numVBOEntries * sizeof(float));
   delete[] data;
 
@@ -105,6 +106,70 @@ void Renderable::init(const QVector<QVector3D>& positions,
     idxAr[i] = indexes.at(i);
   }
   ibo.allocate(idxAr, indexes.size() * sizeof(unsigned int));
+  delete[] idxAr;
+
+  // Make sure we setup our shader inputs properly
+  shader.enableAttributeArray(0);
+  shader.setAttributeBuffer(0, GL_FLOAT, 0, 3, vertexSize * sizeof(float));
+  shader.enableAttributeArray(1);
+  shader.setAttributeBuffer(1, GL_FLOAT, 3 * sizeof(float), 2,
+                            vertexSize * sizeof(float));
+
+  // Release our vao and THEN release our buffers.
+  vao.release();
+  vbo.release();
+  ibo.release();
+}
+
+void Renderable::init(const QVector<VertexData>& vertices,
+                      const QVector<unsigned int>& indices,
+                      const QString& textureFile) {
+  // Set our model matrix to identity
+  modelMatrix.setToIdentity();
+  // Load our texture.
+  texture.setData(QImage(textureFile));
+  // set our number of triangles.
+  elementCount = indices.size();
+
+  // num verts (used to size our vbo)
+  int numVerts = vertices.size();
+  vertexSize = 3 + 2;  // Position + texCoord
+  int numVBOEntries = numVerts * vertexSize;
+
+  // Setup our shader.
+  createShaders();
+
+  // Now we can set up our buffers.
+  // The VBO is created -- now we must create our VAO
+  vao.create();
+  vao.bind();
+  vbo.create();
+  vbo.setUsagePattern(QOpenGLBuffer::StaticDraw);
+  vbo.bind();
+
+  // Create a temporary data array
+  float* data = new float[numVBOEntries];
+  for (int i = 0; i < numVerts; ++i) {
+    data[i * vertexSize + 0] = vertices.at(i).x;
+    data[i * vertexSize + 1] = vertices.at(i).y;
+    data[i * vertexSize + 2] = vertices.at(i).z;
+    data[i * vertexSize + 3] = vertices.at(i).s;
+    data[i * vertexSize + 4] = vertices.at(i).t;
+  }
+
+  vbo.allocate(data, numVBOEntries * sizeof(float));
+  delete[] data;
+
+  // Create our index buffer
+  ibo.create();
+  ibo.bind();
+  ibo.setUsagePattern(QOpenGLBuffer::StaticDraw);
+  // create a temporary array for our indexes
+  unsigned int* idxAr = new unsigned int[indices.size()];
+  for (int i = 0; i < indices.size(); ++i) {
+    idxAr[i] = indices.at(i);
+  }
+  ibo.allocate(idxAr, indices.size() * sizeof(unsigned int));
   delete[] idxAr;
 
   // Make sure we setup our shader inputs properly
@@ -140,7 +205,7 @@ void Renderable::draw(const QMatrix4x4& view, const QMatrix4x4& projection) {
 
   vao.bind();
   texture.bind();
-  glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+  glDrawElements(GL_TRIANGLES, elementCount, GL_UNSIGNED_INT, 0);
   texture.release();
   vao.release();
   shader.release();

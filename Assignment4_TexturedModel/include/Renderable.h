@@ -5,6 +5,7 @@
 #include <QtOpenGL>
 
 #include "Rotation.h"
+#include "VertexData.h"
 
 class Renderable {
  protected:
@@ -14,7 +15,7 @@ class Renderable {
   QOpenGLBuffer vbo;
   QOpenGLBuffer ibo;
   QOpenGLVertexArrayObject vao;
-  unsigned int numTris;
+  unsigned int elementCount;
   int vertexSize;
   Rotation rotation;
 
@@ -28,6 +29,10 @@ class Renderable {
                     const QVector<QVector3D>& normals,
                     const QVector<QVector2D>& texCoords,
                     const QVector<unsigned int>& indexes,
+                    const QString& textureFile);
+
+  virtual void init(const QVector<VertexData>& vertices,
+                    const QVector<unsigned int>& indices,
                     const QString& textureFile);
 
   virtual void update(const qint64 msSinceLastFrame);
