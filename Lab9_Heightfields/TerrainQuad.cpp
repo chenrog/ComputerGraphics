@@ -118,7 +118,7 @@ void TerrainQuad::draw(const QMatrix4x4& world, const QMatrix4x4& view,
 
   // And our color texture at Texture Unit 1.
   // f.glActiveTexture(GL_TEXTURE1);
-  // texture_.bind();
+  texture_.bind();
 
   // Setup our shader uniforms for multiple textures.  Make sure we use the
   // correct texture units as defined above!
