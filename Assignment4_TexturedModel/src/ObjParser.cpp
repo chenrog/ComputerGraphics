@@ -45,9 +45,11 @@ void ObjParser::pushVertexPositions(QStringList data) {
 }
 
 void ObjParser::pushVertexTextures(QStringList data) {
+  // jump by 2 so we can capture each set of coordinates
   for (int i = 0; i < data.size() / 2; i += 2) {
-    float s = data[i].toFloat();
-    float t = (data[i + 1].toFloat()) * -1;  // flip to rightside up
+    // multiplying by -1 seems to flip it to the correct orientation
+    float s = data[i].toFloat() * -1;
+    float t = data[i + 1].toFloat() * -1;
     QVector2D texture = QVector2D(s, t);
     vertexTextures.push_back(texture);
   }
