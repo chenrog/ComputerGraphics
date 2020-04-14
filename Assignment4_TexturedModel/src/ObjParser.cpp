@@ -136,7 +136,7 @@ void ObjParser::parse(QString filePath) {
     else if (type == "mtllib") {
       mtlFilePath = constructFilePath(filePath, data[0]);
     }
-    // invalid
+    // invalid or ignored
     else {
       continue;
     }

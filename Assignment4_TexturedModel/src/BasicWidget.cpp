@@ -23,13 +23,7 @@ void BasicWidget::keyReleaseEvent(QKeyEvent* keyEvent) {
   // Handle key events here.
   int key = keyEvent->key();
 
-  if (key == Qt::Key_Left) {
-    qDebug() << "Left Arrow Pressed";
-    update();
-  } else if (key == Qt::Key_Right) {
-    qDebug() << "Right Arrow Pressed";
-    update();
-  } else if (key == Qt::Key_W) {
+  if (key == Qt::Key_W) {
     qDebug() << "Wireframe On/Off";
     setWireframe();
     update();
@@ -54,49 +48,6 @@ void BasicWidget::setWireframe() {
 void BasicWidget::initializeGL() {
   makeCurrent();
   initializeOpenGLFunctions();
-
-  QString texFile = "./cat3.ppm";
-  QVector<QVector3D> pos;
-  QVector<QVector3D> norm;
-  QVector<QVector2D> texCoord;
-  QVector<unsigned int> idx;
-  // left cat
-  pos << QVector3D(-0.5, -0.5, 0.0);
-  pos << QVector3D(0.5, -0.5, 0.0);
-  pos << QVector3D(-0.5, 0.5, 0.0);
-  pos << QVector3D(0.5, 0.5, 0.0);
-  // right cat
-  // We don't actually use the normals right now, but this will be useful later!
-  norm << QVector3D(0.0, 0.0, 1.0);
-  norm << QVector3D(0.0, 0.0, 1.0);
-  norm << QVector3D(0.0, 0.0, 1.0);
-  norm << QVector3D(0.0, 0.0, 1.0);
-  // TODO:  Make sure to add texture coordinates to pass into the initialization
-  // of our renderable
-  texCoord << QVector2D(0.0, 1.0);
-  texCoord << QVector2D(1.0, 1.0);
-  texCoord << QVector2D(0.0, 0.0);
-  texCoord << QVector2D(1.0, 0.0);
-
-  idx << 0 << 1 << 2 << 2 << 1 << 3;
-
-  Renderable* ren = new Renderable();
-  ren->init(pos, norm, texCoord, idx, texFile);
-  QMatrix4x4 ren_position;
-  ren_position.setToIdentity();
-  ren_position.translate(-1.0, 0.0, 0.0);
-  ren->setModelMatrix(ren_position);
-  ren->setRotationSpeed(0.2);
-  renderables.push_back(ren);
-
-  Renderable* ren2 = new Renderable();
-  ren2->init(pos, norm, texCoord, idx, texFile);
-  ren_position.setToIdentity();
-  ren_position.translate(1.0, 0.0, 0.0);
-  ren2->setModelMatrix(ren_position);
-  ren2->setRotationAxis(QVector3D(0.0, 1.0, 0.0));
-  ren2->setRotationSpeed(1.2);
-  renderables.push_back(ren2);
 
   glViewport(0, 0, width(), height());
   frameTimer.start();
