@@ -25,12 +25,6 @@ class Renderable {
   Renderable();
   virtual ~Renderable();
 
-  virtual void init(const QVector<QVector3D>& positions,
-                    const QVector<QVector3D>& normals,
-                    const QVector<QVector2D>& texCoords,
-                    const QVector<unsigned int>& indexes,
-                    const QString& textureFile);
-
   virtual void init(const QVector<VertexData>& vertices,
                     const QVector<unsigned int>& indices,
                     const QString& textureFile);
