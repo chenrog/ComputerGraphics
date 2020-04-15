@@ -23,15 +23,9 @@ class Sphere : public Renderable {
 
   // Getters for our data.
   QVector<VertexData> getVertices() { return this->vertices; }
-  // QVector<QVector3D> positions() const { return positions_; }
-  // QVector<QVector3D> normals() const { return normals_; }
-  // QVector<QVector2D> texCoords() const { return textureCoords_; }
   QVector<unsigned int> getIndexes() { return index_; }
 
  private:
   QVector<VertexData> vertices;
-  // QVector<QVector3D> positions_;
-  // QVector<QVector3D> normals_;
-  // QVector<QVector2D> textureCoords_;
   QVector<unsigned int> index_;
 };

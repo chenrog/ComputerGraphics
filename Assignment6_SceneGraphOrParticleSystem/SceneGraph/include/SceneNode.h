@@ -9,8 +9,9 @@ class SceneNode {
  private:
   QVector<SceneNode*> children;
   Renderable* ren;
-  QMatrix4x4 Transform;
+  QMatrix4x4 transform;
   QMatrix4x4 worldTransform;
+  QVector3D modelScale;
 
  protected:
   SceneNode* parent;
@@ -20,11 +21,14 @@ class SceneNode {
   ~SceneNode();
 
   void setTransform(const QMatrix4x4& transform) {
-    this->Transform = transform;
+    this->transform = transform;
   }
 
-  const QMatrix4x4 getTransform() { return this->Transform; }
+  const QMatrix4x4 getTransform() { return this->transform; }
   QMatrix4x4 getWorldTransform() { return this->worldTransform; }
+
+  void setModelScale(QVector3D scale) { modelScale = scale; }
+  QVector3D getModelScale() const { return this->modelScale; }
 
   void addChild(SceneNode* node);
 

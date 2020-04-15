@@ -79,16 +79,113 @@ void BasicWidget::initializeGL() {
   makeCurrent();
   initializeOpenGLFunctions();
 
+  // SUN
   Sphere* sunSphere = new Sphere("./planets/sun.ppm");
+  sunSphere->setRotationAxis(QVector3D(0.0, 0.0, 1.0));
+  sunSphere->setRotationSpeed(0.25);
+
   SceneNode* sunNode = new SceneNode(sunSphere);
   QMatrix4x4 mat;
   mat.setToIdentity();
   sunNode->setTransform(mat);
-
+  sunNode->setModelScale(QVector3D(0.5, 0.5, 0.5));
   root = sunNode;
+
+  // MERCURY
+  Sphere* mercSphere = new Sphere("./planets/mercury.ppm");
+  mercSphere->setRotationAxis(QVector3D(0.0, 0.0, 1.0));
+  mercSphere->setRotationSpeed(1.0);
+
+  SceneNode* mercNode = new SceneNode(mercSphere);
+  mat.setToIdentity();
+  mat.translate(2, 0, 0);
+  mercNode->setTransform(mat);
+  mercNode->setModelScale(QVector3D(0.25, 0.25, 0.25));
+  sunNode->addChild(mercNode);
+
+  // MERCURY MOON 1
+  Sphere* mercMoonSphere = new Sphere("./planets/rock.ppm");
+  SceneNode* mercMoonNode = new SceneNode(mercMoonSphere);
+  mat.setToIdentity();
+  mat.translate(0.5, 0.5, 0);
+  mercMoonNode->setTransform(mat);
+  mercMoonNode->setModelScale(QVector3D(0.1, 0.1, 0.1));
+  mercNode->addChild(mercMoonNode);
+
+  // MERCURY MOON 2
+  Sphere* mercMoonSphere2 = new Sphere("./planets/rock.ppm");
+  SceneNode* mercMoonNode2 = new SceneNode(mercMoonSphere2);
+  mat.setToIdentity();
+  mat.translate(-0.5, 0, 0);
+  mercMoonNode2->setTransform(mat);
+  mercMoonNode2->setModelScale(QVector3D(0.1, 0.1, 0.1));
+  mercNode->addChild(mercMoonNode2);
+
+  // MERCURY MOON 3
+  Sphere* mercMoonSphere3 = new Sphere("./planets/rock.ppm");
+  SceneNode* mercMoonNode3 = new SceneNode(mercMoonSphere3);
+  mat.setToIdentity();
+  mat.translate(0.7, 0, 0);
+  mercMoonNode3->setTransform(mat);
+  mercMoonNode3->setModelScale(QVector3D(0.15, 0.15, 0.15));
+  mercNode->addChild(mercMoonNode3);
+
+  // EARTH
+  Sphere* earthSphere = new Sphere("./planets/earth.ppm");
+  earthSphere->setRotationAxis(QVector3D(0.0, 0.0, 1.0));
+  earthSphere->setRotationSpeed(-0.25);
+
+  SceneNode* earthNode = new SceneNode(earthSphere);
+  mat.setToIdentity();
+  mat.translate(-2, 2, 0);
+  earthNode->setTransform(mat);
+  earthNode->setModelScale(QVector3D(0.4, 0.4, 0.4));
+  sunNode->addChild(earthNode);
 
   glViewport(0, 0, width(), height());
   frameTimer.start();
+
+  // MOON
+  Sphere* moonSphere = new Sphere("./planets/rock.ppm");
+  SceneNode* moonNode = new SceneNode(moonSphere);
+  mat.setToIdentity();
+  mat.translate(-0.7, 0, 0);
+  moonNode->setTransform(mat);
+  moonNode->setModelScale(QVector3D(0.1, 0.1, 0.1));
+  earthNode->addChild(moonNode);
+
+  // PLANET
+  Sphere* planetSphere = new Sphere("./planets/planet.ppm");
+  planetSphere->setRotationAxis(QVector3D(0.0, 0.0, 1.0));
+  planetSphere->setRotationSpeed(-0.05);
+
+  SceneNode* planetNode = new SceneNode(planetSphere);
+  mat.setToIdentity();
+  mat.translate(0, -4, 0);
+  planetNode->setTransform(mat);
+  planetNode->setModelScale(QVector3D(0.7, 0.7, 0.7));
+  sunNode->addChild(planetNode);
+
+  glViewport(0, 0, width(), height());
+  frameTimer.start();
+
+  // PLANET MOON 1
+  Sphere* planetMoonSphere = new Sphere("./planets/rock.ppm");
+  SceneNode* planetMoonNode = new SceneNode(planetMoonSphere);
+  mat.setToIdentity();
+  mat.translate(-1.2, 0, 0);
+  planetMoonNode->setTransform(mat);
+  planetMoonNode->setModelScale(QVector3D(0.1, 0.1, 0.1));
+  planetNode->addChild(planetMoonNode);
+
+  // PLANET MOON 2
+  Sphere* planetMoonSphere2 = new Sphere("./planets/rock.ppm");
+  SceneNode* planetMoonNode2 = new SceneNode(planetMoonSphere2);
+  mat.setToIdentity();
+  mat.translate(1.2, 0, 0);
+  planetMoonNode2->setTransform(mat);
+  planetMoonNode2->setModelScale(QVector3D(0.1, 0.1, 0.1));
+  planetNode->addChild(planetMoonNode2);
 }
 
 void BasicWidget::resizeGL(int w, int h) {

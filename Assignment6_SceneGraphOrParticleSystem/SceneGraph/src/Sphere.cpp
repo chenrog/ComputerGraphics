@@ -32,12 +32,6 @@ void Sphere::init() {
       float u = 1 - ((float)longNumber / (float)longitudeBands);
       float v = 1 - ((float)latNumber / (float)latitudeBands);
 
-      // Setup geometry
-      // positions_.push_back(
-      //     QVector3D(radius * x, radius * y, radius * z));  // Position
-      // normals_.push_back(QVector3D(radius * x, radius * y, radius * z));
-      // textureCoords_.push_back(QVector2D(u, v));  // Texture
-
       QVector3D position = QVector3D(radius * x, radius * y, radius * z);
       QVector3D normal = QVector3D(radius * x, radius * y, radius * z);
       QVector2D textureCoords = QVector2D(u, v);

@@ -60,8 +60,6 @@ void Renderable::init(const QVector<VertexData>& vertices,
   vertexSize = VertexData::size();
   int numVBOEntries = numVerts * vertexSize;
 
-  qDebug() << numVerts;
-
   // Setup our shader.
   createShaders();
 
