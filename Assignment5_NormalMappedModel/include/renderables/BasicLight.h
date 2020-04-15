@@ -2,14 +2,14 @@
 
 #include "Renderable.h"
 
-class UnitQuad : public Renderable {
+class BasicLight : public Renderable {
  protected:
   QVector3D lightPos;
   float sign;
 
  public:
-  UnitQuad();
-  virtual ~UnitQuad();
+  BasicLight();
+  virtual ~BasicLight();
 
   // Our init method is much easier now.  We only need a texture!
   virtual void init(const QVector<VertexData>& vertices,

@@ -1,16 +1,16 @@
-#include "UnitQuad.h"
+#include "BasicLight.h"
 
-UnitQuad::UnitQuad() : lightPos(0.0f, 0.0f, -6.0f), sign(1.0f) {}
+BasicLight::BasicLight() : lightPos(0.0f, 0.0f, -6.0f), sign(1.0f) {}
 
-UnitQuad::~UnitQuad() {}
+BasicLight::~BasicLight() {}
 
-void UnitQuad::init(const QVector<VertexData>& vertices,
+void BasicLight::init(const QVector<VertexData>& vertices,
                     const QVector<unsigned int>& indices,
                     const QString& textureFile) {
   Renderable::init(vertices, indices, textureFile);
 }
 
-void UnitQuad::update(const qint64 msSinceLastFrame) {
+void BasicLight::update(const qint64 msSinceLastFrame) {
   // This is where we want to maintain our light.
   float secs = (float)msSinceLastFrame / 1000.0f;
   float angle = (secs * (2.0f / 3.0f)) * 180.0f;

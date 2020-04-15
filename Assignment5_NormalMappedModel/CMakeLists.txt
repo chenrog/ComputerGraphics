@@ -13,31 +13,32 @@ include_directories(
   ${QtCore_INCLUDES}
   ${QtGui_INCLUDES}
   ${QtOpenGL_INCLUDES}
+  include/renderables
   include/window
   include/
 )
 
 set(
   HEADERS
+  include/renderables/Renderable.h
+  include/renderables/BasicLight.h
   include/window/App.h
   include/BasicWidget.h
   include/Camera.h
   include/ObjParser.h
-  include/Renderable.h
   include/Rotation.h
-  include/UnitQuad.h
   include/VertexData.h
 )
 
 set(
   SOURCES
+  src/renderables/Renderable.cpp
+  src/renderables/BasicLight.cpp
   src/window/App.cpp
   src/BasicWidget.cpp
   src/Camera.cpp
   src/ObjParser.cpp
-  src/Renderable.cpp
   src/Rotation.cpp
-  src/UnitQuad.cpp
   main.cpp
 )
 
