@@ -7,6 +7,7 @@
 #include "Camera.h"
 #include "ObjParser.h"
 #include "Renderable.h"
+#include "UnitQuad.h"
 #include "VertexData.h"
 
 /**

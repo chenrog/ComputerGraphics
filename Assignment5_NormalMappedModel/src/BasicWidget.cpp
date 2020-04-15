@@ -133,7 +133,7 @@ void BasicWidget::load(QString filePath) {
   auto verts = objParser->getVertices();
   auto idxs = objParser->getIndices();
   auto texFile = objParser->getTextureFilePath();
-  Renderable* ren = new Renderable();
+  UnitQuad* ren = new UnitQuad();
 
   ren->init(verts, idxs, texFile);
   QMatrix4x4 ren_position;

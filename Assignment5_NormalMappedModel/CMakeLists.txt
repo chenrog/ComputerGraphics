@@ -25,6 +25,7 @@ set(
   include/ObjParser.h
   include/Renderable.h
   include/Rotation.h
+  include/UnitQuad.h
   include/VertexData.h
 )
 
@@ -36,6 +37,7 @@ set(
   src/ObjParser.cpp
   src/Renderable.cpp
   src/Rotation.cpp
+  src/UnitQuad.cpp
   main.cpp
 )
 

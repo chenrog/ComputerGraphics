@@ -57,7 +57,7 @@ void Renderable::init(const QVector<VertexData>& vertices,
 
   // num verts (used to size our vbo)
   int numVerts = vertices.size();
-  vertexSize = 3 + 2;  // Position + texCoord
+  vertexSize = VertexData::size();
   int numVBOEntries = numVerts * vertexSize;
 
   // Setup our shader.
@@ -77,8 +77,11 @@ void Renderable::init(const QVector<VertexData>& vertices,
     data[i * vertexSize + 0] = vertices.at(i).x;
     data[i * vertexSize + 1] = vertices.at(i).y;
     data[i * vertexSize + 2] = vertices.at(i).z;
-    data[i * vertexSize + 3] = vertices.at(i).s;
-    data[i * vertexSize + 4] = vertices.at(i).t;
+    data[i * vertexSize + 3] = vertices.at(i).xn;
+    data[i * vertexSize + 4] = vertices.at(i).yn;
+    data[i * vertexSize + 5] = vertices.at(i).zn;
+    data[i * vertexSize + 6] = vertices.at(i).s;
+    data[i * vertexSize + 7] = vertices.at(i).t;
   }
 
   vbo.allocate(data, numVBOEntries * sizeof(float));
@@ -97,10 +100,16 @@ void Renderable::init(const QVector<VertexData>& vertices,
   delete[] idxAr;
 
   // Make sure we setup our shader inputs properly
+  // positions
   shader.enableAttributeArray(0);
   shader.setAttributeBuffer(0, GL_FLOAT, 0, 3, vertexSize * sizeof(float));
+  // normals
   shader.enableAttributeArray(1);
-  shader.setAttributeBuffer(1, GL_FLOAT, 3 * sizeof(float), 2,
+  shader.setAttributeBuffer(1, GL_FLOAT, 3 * sizeof(float), 3,
+                            vertexSize * sizeof(float));
+  // texture coordinates
+  shader.enableAttributeArray(2);
+  shader.setAttributeBuffer(2, GL_FLOAT, 6 * sizeof(float), 2,
                             vertexSize * sizeof(float));
 
   // Release our vao and THEN release our buffers.

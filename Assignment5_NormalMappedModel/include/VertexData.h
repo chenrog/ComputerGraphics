@@ -34,6 +34,8 @@ struct VertexData {
   QVector3D normal() { return QVector3D(xn, yn, zn); }
 
   QVector3D texture() { return QVector2D(s, t); }
+
+  static int size() { return 8; }
 };
 
 inline bool operator==(const VertexData &a, const VertexData &b) {
