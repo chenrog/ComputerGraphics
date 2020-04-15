@@ -113,19 +113,19 @@ void Renderable::update(const qint64 msSinceLastFrame) {
   rotation.update(msSinceLastFrame);
 }
 
-void Renderable::draw(const QMatrix4x4& view, const QMatrix4x4& projection) {
-  // Create our model matrix.
-  QMatrix4x4 rotMatrix = rotation.toMatrix();
+void Renderable::draw(const QMatrix4x4& world, const Camera& camera) {
+  // incorporate a real world transform if want it.
+  QMatrix4x4 modelMat = world * modelMatrix * rotation.toMatrix();
 
-  QMatrix4x4 modelMat = modelMatrix * rotMatrix;
   // Make sure our state is what we want
   shader.bind();
+
   // Set our matrix uniforms!
   QMatrix4x4 id;
   id.setToIdentity();
   shader.setUniformValue("modelMatrix", modelMat);
-  shader.setUniformValue("viewMatrix", view);
-  shader.setUniformValue("projectionMatrix", projection);
+  shader.setUniformValue("viewMatrix", camera.getViewMatrix());
+  shader.setUniformValue("projectionMatrix", camera.getProjectionMatrix());
 
   vao.bind();
   texture.bind();

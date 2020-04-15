@@ -4,6 +4,7 @@
 #include <QtOpenGL>
 #include <QtWidgets>
 
+#include "Camera.h"
 #include "ObjParser.h"
 #include "Renderable.h"
 #include "VertexData.h"
@@ -16,20 +17,25 @@ class BasicWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   Q_OBJECT
 
  private:
-  // camera, abstract maybe
-  QMatrix4x4 model;
-  QMatrix4x4 view;
-  QMatrix4x4 projection;
+  QMatrix4x4 world;
+  Camera camera;
 
   QElapsedTimer frameTimer;
   QVector<Renderable*> renderables;
   QOpenGLDebugLogger logger;
+
+  enum MouseControl { NoAction = 0, Rotate, Zoom };
+  QPoint lastMouseLoc;
+  MouseControl mouseAction;
 
   bool wireframe = false;
 
  protected:
   // Required interaction overrides
   void keyReleaseEvent(QKeyEvent* keyEvent) override;
+  void mousePressEvent(QMouseEvent* mouseEvent) override;
+  void mouseMoveEvent(QMouseEvent* mouseEvent) override;
+  void mouseReleaseEvent(QMouseEvent* mouseEvent) override;
 
   // Required overrides form QOpenGLWidget
   void initializeGL() override;

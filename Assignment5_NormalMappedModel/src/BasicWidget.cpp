@@ -5,6 +5,9 @@
 BasicWidget::BasicWidget(QWidget* parent)
     : QOpenGLWidget(parent), logger(this) {
   setFocusPolicy(Qt::StrongFocus);
+  camera.setPosition(QVector3D(0.0, 0.5, -5.0));
+  camera.setLookAt(QVector3D(0.0, 0.5, 0.0));
+  world.setToIdentity();
 }
 
 BasicWidget::~BasicWidget() {
@@ -27,6 +30,10 @@ void BasicWidget::keyReleaseEvent(QKeyEvent* keyEvent) {
     qDebug() << "Wireframe On/Off";
     setWireframe();
     update();
+  } else if (keyEvent->key() == Qt::Key_R) {
+    camera.setPosition(QVector3D(0.0, 0.5, -5.0));
+    camera.setLookAt(QVector3D(0.0, 0.5, 0.0));
+    update();
   } else if (key == Qt::Key_Q) {
     qDebug() << "Quit";
     std::exit(0);
@@ -43,6 +50,34 @@ void BasicWidget::setWireframe() {
   } else {
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
   }
+}
+
+void BasicWidget::mousePressEvent(QMouseEvent* mouseEvent) {
+  if (mouseEvent->button() == Qt::LeftButton) {
+    mouseAction = Rotate;
+  } else if (mouseEvent->button() == Qt::RightButton) {
+    mouseAction = Zoom;
+  }
+  lastMouseLoc = mouseEvent->pos();
+}
+
+void BasicWidget::mouseMoveEvent(QMouseEvent* mouseEvent) {
+  if (mouseAction == NoAction) {
+    return;
+  }
+  QPoint delta = mouseEvent->pos() - lastMouseLoc;
+  lastMouseLoc = mouseEvent->pos();
+  if (mouseAction == Rotate) {
+    float angle = qDegreesToRadians(0.5f * delta.x());
+    camera.rotateY(angle);
+  } else if (mouseAction == Zoom) {
+    camera.translateCamera(camera.gazeVector() * 0.03f * -delta.y());
+  }
+  update();
+}
+
+void BasicWidget::mouseReleaseEvent(QMouseEvent* mouseEvent) {
+  mouseAction = NoAction;
 }
 
 void BasicWidget::initializeGL() {
@@ -66,11 +101,8 @@ void BasicWidget::resizeGL(int w, int h) {
     logger.startLogging();
   }
   glViewport(0, 0, w, h);
-  view.setToIdentity();
-  view.lookAt(QVector3D(0.0f, 0.0f, 2.0f), QVector3D(0.0f, 0.0f, 0.0f),
-              QVector3D(0.0f, 1.0f, 0.0f));
-  projection.setToIdentity();
-  projection.perspective(70.f, (float)w / (float)h, 0.001, 1000.0);
+
+  camera.setPerspective(70.f, (float)w / (float)h, 0.001, 1000.0);
   glViewport(0, 0, w, h);
 }
 
@@ -84,7 +116,7 @@ void BasicWidget::paintGL() {
 
   for (auto renderable : renderables) {
     renderable->update(msSinceRestart);
-    renderable->draw(view, projection);
+    renderable->draw(world, camera);
   }
   update();
 }
@@ -106,10 +138,9 @@ void BasicWidget::load(QString filePath) {
   ren->init(verts, idxs, texFile);
   QMatrix4x4 ren_position;
   ren_position.setToIdentity();
-  ren_position.translate(0.0, 0.0, -2.0);
   ren->setModelMatrix(ren_position);
   ren->setRotationAxis(QVector3D(0.0, 1.0, 0.0));
-  ren->setRotationSpeed(0.2);
+  ren->setRotationSpeed(0.0);
 
   renderables.push_back(ren);
 }
