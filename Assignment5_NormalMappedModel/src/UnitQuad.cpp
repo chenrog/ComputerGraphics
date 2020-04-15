@@ -1,6 +1,6 @@
 #include "UnitQuad.h"
 
-UnitQuad::UnitQuad() : lightPos_(0.0f, 0.0f, -6.0f), sign_(1.0f) {}
+UnitQuad::UnitQuad() : lightPos(0.0f, 0.0f, -6.0f), sign(1.0f) {}
 
 UnitQuad::~UnitQuad() {}
 
@@ -20,27 +20,22 @@ void UnitQuad::update(const qint64 msSinceLastFrame) {
   rot.setToIdentity();
   rot.rotate(angle, 0.0, 1.0, 0.0);
 
-  QVector3D firstPos = rot * lightPos_;
-  lightPos_ = firstPos;
-
-  // Because we aren't doing any occlusion, the lighting on the walls looks
-  // super wonky.  Instead, just move the light on the z axis.
-  // firstPos.setX(0.5);
-
-  QVector3D secondPos = QVector3D(0.0f, 0.0f, 0.0f);
+  QVector3D rotatingLightPosition = rot * lightPos;
+  lightPos = rotatingLightPosition;
 
   // TODO:  Understand how the light gets initialized/setup.
   shader.bind();
   shader.setUniformValue("pointLights[0].color", 0.996f, 0.5f, 0.614f);
-  shader.setUniformValue("pointLights[0].position", firstPos);
+  shader.setUniformValue("pointLights[0].position", rotatingLightPosition);
   shader.setUniformValue("pointLights[0].ambientIntensity", 1.5f);
   shader.setUniformValue("pointLights[0].specularStrength", 1.5f);
   shader.setUniformValue("pointLights[0].constant", 0.05f);
   shader.setUniformValue("pointLights[0].linear", 0.10f);
   shader.setUniformValue("pointLights[0].quadratic", 0.064f);
 
+  QVector3D innerLightPosition = QVector3D(0.0f, 0.0f, 0.0f);
   shader.setUniformValue("pointLights[1].color", 1.0, 1.0f, 1.0f);
-  shader.setUniformValue("pointLights[1].position", secondPos);
+  shader.setUniformValue("pointLights[1].position", innerLightPosition);
   shader.setUniformValue("pointLights[1].ambientIntensity", 10.0f);
   shader.setUniformValue("pointLights[1].specularStrength", 0.5f);
   shader.setUniformValue("pointLights[1].constant", 0.50f);
