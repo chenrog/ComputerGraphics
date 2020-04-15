@@ -18,11 +18,9 @@ class App : public QMainWindow {
  signals:
 
  private slots:
-  void selectObject(QString filePath);
 
  private:
   BasicWidget* widget;
 
   void buildGui();
-  void populateObjectSelectMenu(QMenu* objectMenu);
 };

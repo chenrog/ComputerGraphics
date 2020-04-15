@@ -9,7 +9,7 @@ class SceneNode {
  private:
   QVector<SceneNode*> children;
   Renderable* ren;
-  QMatrix4x4 localTransform;
+  QMatrix4x4 Transform;
   QMatrix4x4 worldTransform;
 
  protected:
@@ -19,11 +19,11 @@ class SceneNode {
   SceneNode(Renderable* ren);
   ~SceneNode();
 
-  void setLocalTransform(const QMatrix4x4& transform) {
-    this->localTransform = transform;
+  void setTransform(const QMatrix4x4& transform) {
+    this->Transform = transform;
   }
 
-  const QMatrix4x4 getLocalTransform() { return this->localTransform; }
+  const QMatrix4x4 getTransform() { return this->Transform; }
   QMatrix4x4 getWorldTransform() { return this->worldTransform; }
 
   void addChild(SceneNode* node);

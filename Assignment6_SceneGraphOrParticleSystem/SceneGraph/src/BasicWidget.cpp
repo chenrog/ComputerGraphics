@@ -10,12 +10,7 @@ BasicWidget::BasicWidget(QWidget* parent)
   world.setToIdentity();
 }
 
-BasicWidget::~BasicWidget() {
-  for (auto renderable : renderables) {
-    delete renderable;
-  }
-  renderables.clear();
-}
+BasicWidget::~BasicWidget() { delete root; }
 
 //////////////////////////////////////////////////////////////////////
 // Privates
@@ -84,6 +79,14 @@ void BasicWidget::initializeGL() {
   makeCurrent();
   initializeOpenGLFunctions();
 
+  Sphere* sunSphere = new Sphere("./planets/sun.ppm");
+  SceneNode* sunNode = new SceneNode(sunSphere);
+  QMatrix4x4 mat;
+  mat.setToIdentity();
+  sunNode->setTransform(mat);
+
+  root = sunNode;
+
   glViewport(0, 0, width(), height());
   frameTimer.start();
 }
@@ -114,33 +117,7 @@ void BasicWidget::paintGL() {
   glClearColor(0.f, 0.f, 0.f, 1.f);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-  for (auto renderable : renderables) {
-    renderable->update(msSinceRestart);
-    renderable->draw(world, camera);
-  }
+  root->update(msSinceRestart);
+  root->draw(world, camera);
   update();
-}
-
-void BasicWidget::load(QString filePath) {
-  for (auto renderable : renderables) {
-    delete renderable;
-  }
-  renderables.clear();
-
-  ObjParser* objParser = ObjParser::Instance();
-  objParser->parse(filePath);
-
-  auto verts = objParser->getVertices();
-  auto idxs = objParser->getIndices();
-  auto texFile = objParser->getTextureFilePath();
-  BasicLight* ren = new BasicLight();
-
-  ren->init(verts, idxs, texFile);
-  QMatrix4x4 ren_position;
-  ren_position.setToIdentity();
-  ren->setModelMatrix(ren_position);
-  ren->setRotationAxis(QVector3D(0.0, 1.0, 0.0));
-  ren->setRotationSpeed(0.0);
-
-  renderables.push_back(ren);
 }

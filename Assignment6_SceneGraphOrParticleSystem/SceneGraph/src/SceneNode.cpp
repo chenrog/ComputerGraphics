@@ -18,9 +18,9 @@ void SceneNode::addChild(SceneNode* node) {
 
 void SceneNode::update(const qint64 msSinceLastFrame) {
   if (parent) {
-    worldTransform = parent->worldTransform * localTransform;
+    worldTransform = parent->worldTransform * Transform;
   } else {
-    worldTransform = localTransform;
+    worldTransform = Transform;
   }
 
   for (unsigned int i = 0; i < children.size(); ++i) {

@@ -21,7 +21,6 @@ include_directories(
 set(
   HEADERS
   include/renderables/Renderable.h
-  include/renderables/BasicLight.h
   include/window/App.h
   include/BasicWidget.h
   include/Camera.h
@@ -35,13 +34,13 @@ set(
 set(
   SOURCES
   src/renderables/Renderable.cpp
-  src/renderables/BasicLight.cpp
   src/window/App.cpp
   src/BasicWidget.cpp
   src/Camera.cpp
   src/ObjParser.cpp
   src/Rotation.cpp
   src/SceneNode.cpp
+  src/Sphere.cpp
   main.cpp
 )
 

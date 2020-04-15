@@ -4,10 +4,11 @@
 #include <QtOpenGL>
 #include <QtWidgets>
 
-#include "BasicLight.h"
 #include "Camera.h"
 #include "ObjParser.h"
 #include "Renderable.h"
+#include "SceneNode.h"
+#include "Sphere.h"
 #include "VertexData.h"
 
 /**
@@ -22,7 +23,7 @@ class BasicWidget : public QOpenGLWidget, protected QOpenGLFunctions {
   Camera camera;
 
   QElapsedTimer frameTimer;
-  QVector<Renderable*> renderables;
+  SceneNode* root;
   QOpenGLDebugLogger logger;
 
   enum MouseControl { NoAction = 0, Rotate, Zoom };
