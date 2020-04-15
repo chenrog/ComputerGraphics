@@ -27,6 +27,7 @@ set(
   include/Camera.h
   include/ObjParser.h
   include/Rotation.h
+  include/SceneNode.h
   include/Sphere.h
   include/VertexData.h
 )
@@ -40,6 +41,7 @@ set(
   src/Camera.cpp
   src/ObjParser.cpp
   src/Rotation.cpp
+  src/SceneNode.cpp
   main.cpp
 )
 
