@@ -44,9 +44,20 @@ void ObjParser::pushVertexPositions(QStringList data) {
   }
 }
 
+void ObjParser::pushVertexNormals(QStringList data) {
+  // stubbed for now
+  for (int i = 0; i < data.size(); i += 3) {
+    float xn = data[i].toFloat();
+    float yn = data[i + 1].toFloat();
+    float zn = data[i + 2].toFloat();
+    QVector3D normal = QVector3D(xn, yn, zn);
+    vertexNormals.push_back(normal);
+  }
+}
+
 void ObjParser::pushVertexTextures(QStringList data) {
   // jump by 2 so we can capture each set of coordinates
-  for (int i = 0; i < data.size() / 2; i += 2) {
+  for (int i = 0; i < data.size(); i += 2) {
     // multiplying by -1 seems to flip it to the correct orientation
     float s = data[i].toFloat() * -1;
     float t = data[i + 1].toFloat() * -1;
@@ -55,21 +66,18 @@ void ObjParser::pushVertexTextures(QStringList data) {
   }
 }
 
-void ObjParser::pushVertexNormals(QStringList data) {
-  // stubbed for now
-}
-
 void ObjParser::pushVerticesAndIndices(QStringList data) {
   for (int i = 0; i < data.size(); i++) {
     QStringList tuple = data[i].split("/");
     // get indices
     uint positionIdx = tuple[0].toUInt() - 1;
     uint textureIdx = tuple[1].toUInt() - 1;
-    // uint vertexNormal = tuple[2].toUInt() - 1;
+    uint normalIdx = tuple[2].toUInt() - 1;
     // create VertexData
     QVector3D position = vertexPositions[positionIdx];
+    QVector3D normal = vertexNormals[normalIdx];
     QVector2D texture = vertexTextures[textureIdx];
-    VertexData vertex = VertexData(position, texture);
+    VertexData vertex = VertexData(position, normal, texture);
     // add to vertices if not already included
     if (!vertices.contains(vertex)) {
       vertices.push_back(vertex);
@@ -118,17 +126,17 @@ void ObjParser::parse(QString filePath) {
     QStringList data = qline.split(' ', QString::SkipEmptyParts);
     QString type = data.takeFirst();  // this also removes type
 
+    // vertex positions
+    if (type == "v") {
+      pushVertexPositions(data);
+    }
     // vertex normal
-    if (type == "vn") {
+    else if (type == "vn") {
       pushVertexNormals(data);
     }
-    // vertex texure, we ignore this for now but would mess with vertex
+    // vertex texure
     else if (type == "vt") {
       pushVertexTextures(data);
-    }
-    // vertex positions
-    else if (type == "v") {
-      pushVertexPositions(data);
     }
     // face / VertexData
     else if (type == "f") {

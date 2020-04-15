@@ -27,8 +27,8 @@ class ObjParser {
  protected:
   QVector<VertexData> vertices;
   QVector<QVector3D> vertexPositions;
+  QVector<QVector3D> vertexNormals;
   QVector<QVector2D> vertexTextures;
-  QVector<float> vertexNormals;
   QVector<uint> indices;
   QString textureFilePath;
 
